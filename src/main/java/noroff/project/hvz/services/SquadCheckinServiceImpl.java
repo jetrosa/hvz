@@ -1,5 +1,6 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.SquadCheckin;
 import noroff.project.hvz.repositories.SquadCheckinRepository;
 import org.slf4j.Logger;
@@ -17,32 +18,38 @@ public class SquadCheckinServiceImpl implements SquadCheckinService{
     }
 
     @Override
-    public SquadCheckin findById(Integer integer) {
-        return null;
+    public SquadCheckin findById(Integer id) {
+        return squadCheckinRepository.findById(id)
+                .orElseThrow(() -> {
+                            logger.warn("No squad checkin exists with ID: " + id);
+                            return new RecordNotFoundException("Squad checkin", id);
+                        }
+                );
     }
 
     @Override
     public Collection<SquadCheckin> findAll() {
-        return null;
+        return squadCheckinRepository.findAll();
     }
 
     @Override
     public SquadCheckin add(SquadCheckin entity) {
-        return null;
+        return squadCheckinRepository.save(entity);
     }
 
     @Override
     public SquadCheckin update(SquadCheckin entity) {
-        return null;
+        return squadCheckinRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Integer integer) {
-
+    public void deleteById(Integer id) {
+        delete(findById(id));
     }
 
     @Override
-    public void delete(SquadCheckin entity) {
-
+    public void delete(SquadCheckin squadCheckin) {
+        squadCheckinRepository.delete(squadCheckin);
+        //todo chatmessage
     }
 }

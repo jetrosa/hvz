@@ -1,5 +1,6 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.repositories.PlayerRepository;
 import org.slf4j.Logger;
@@ -16,32 +17,38 @@ public class PlayerServiceImpl implements PlayerService{
         this.playerRepository=playerRepository;
     }
     @Override
-    public Player findById(Integer integer) {
-        return null;
+    public Player findById(Integer id) {
+        return playerRepository.findById(id)
+                .orElseThrow(() -> {
+                            logger.warn("No player exists with ID: " + id);
+                            return new RecordNotFoundException("Player", id);
+                        }
+                );
     }
 
     @Override
     public Collection<Player> findAll() {
-        return null;
+        return playerRepository.findAll();
     }
 
     @Override
     public Player add(Player entity) {
-        return null;
+        return playerRepository.save(entity);
     }
 
     @Override
     public Player update(Player entity) {
-        return null;
+        return playerRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Integer integer) {
-
+    public void deleteById(Integer id) {
+        delete(findById(id));
     }
 
     @Override
-    public void delete(Player entity) {
-
+    public void delete(Player player) {
+        playerRepository.delete(player);
+        //todo chatmessage
     }
 }

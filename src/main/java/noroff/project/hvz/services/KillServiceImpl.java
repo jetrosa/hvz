@@ -1,5 +1,6 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Kill;
 import noroff.project.hvz.repositories.KillRepository;
 import org.slf4j.Logger;
@@ -16,32 +17,37 @@ public class KillServiceImpl implements KillService{
         this.killRepository=killRepository;
     }
     @Override
-    public Kill findById(Integer integer) {
-        return null;
+    public Kill findById(Integer id) {
+        return killRepository.findById(id)
+                .orElseThrow(() -> {
+                            logger.warn("No kill exists with ID: " + id);
+                            return new RecordNotFoundException("Kill", id);
+                        }
+                );
     }
 
     @Override
     public Collection<Kill> findAll() {
-        return null;
+        return killRepository.findAll();
     }
 
     @Override
     public Kill add(Kill entity) {
-        return null;
+        return killRepository.save(entity);
     }
 
     @Override
     public Kill update(Kill entity) {
-        return null;
+        return killRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Integer integer) {
-
+    public void deleteById(Integer id) {
+        delete(findById(id));
     }
 
     @Override
-    public void delete(Kill entity) {
-
+    public void delete(Kill kill) {
+        killRepository.delete(kill);
     }
 }

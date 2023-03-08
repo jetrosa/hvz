@@ -1,5 +1,6 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.repositories.AppUserRepository;
 import org.slf4j.Logger;
@@ -18,32 +19,38 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser findById(Integer integer) {
-        return null;
+    public AppUser findById(Integer id) {
+        return appUserRepository.findById(id)
+                .orElseThrow(() -> {
+                            logger.warn("No user exists with ID: " + id);
+                            return new RecordNotFoundException("App user", id);
+                        }
+                );
     }
 
     @Override
     public Collection<AppUser> findAll() {
-        return null;
+        return appUserRepository.findAll();
     }
 
     @Override
     public AppUser add(AppUser entity) {
-        return null;
+        return appUserRepository.save(entity);
     }
 
     @Override
     public AppUser update(AppUser entity) {
-        return null;
+        return appUserRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Integer integer) {
-
+    public void deleteById(Integer id) {
+        delete(findById(id));
     }
 
     @Override
-    public void delete(AppUser entity) {
-
+    public void delete(AppUser appUser) {
+        appUserRepository.delete(appUser);
+        //todo player
     }
 }

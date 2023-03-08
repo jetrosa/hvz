@@ -1,7 +1,7 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Mission;
-import noroff.project.hvz.repositories.KillRepository;
 import noroff.project.hvz.repositories.MissionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,32 +17,37 @@ public class MissionServiceImpl implements MissionService{
         this.missionRepository=missionRepository;
     }
     @Override
-    public Mission findById(Integer integer) {
-        return null;
+    public Mission findById(Integer id) {
+        return missionRepository.findById(id)
+                .orElseThrow(() -> {
+                            logger.warn("No mission exists with ID: " + id);
+                            return new RecordNotFoundException("Mission", id);
+                        }
+                );
     }
 
     @Override
     public Collection<Mission> findAll() {
-        return null;
+        return missionRepository.findAll();
     }
 
     @Override
     public Mission add(Mission entity) {
-        return null;
+        return missionRepository.save(entity);
     }
 
     @Override
     public Mission update(Mission entity) {
-        return null;
+        return missionRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Integer integer) {
-
+    public void deleteById(Integer id) {
+        delete(findById(id));
     }
 
     @Override
-    public void delete(Mission entity) {
-
+    public void delete(Mission mission) {
+        missionRepository.delete(mission);
     }
 }
