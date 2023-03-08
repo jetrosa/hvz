@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -56,5 +55,5 @@ public class Game {
     private Double seLong;
     @NotNull(message = "Game master (admin) may not be null")
     @ManyToOne
-    private User gameMaster;
+    private AppUser gameMaster;
 }

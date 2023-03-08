@@ -23,7 +23,7 @@ public class Player {
     private Boolean biteCode;
     @NotNull(message = "User may not be null")
     @ManyToOne
-    private User user;
+    private AppUser appUser;
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
