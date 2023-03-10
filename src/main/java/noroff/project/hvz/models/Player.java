@@ -2,12 +2,10 @@ package noroff.project.hvz.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +18,7 @@ public class Player {
     private Boolean isPatientZero;
     @NotNull(message = "Personal bite code may not be null")
     @Column(name = "bite_code", unique=true)
-    private Boolean biteCode;
+    private String biteCode;
     @NotNull(message = "User may not be null")
     @ManyToOne
     private AppUser appUser;

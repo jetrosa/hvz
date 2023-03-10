@@ -2,16 +2,14 @@ package noroff.project.hvz.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class SquadCheckin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +24,10 @@ public class SquadCheckin {
     private LocalDateTime endTime;
     @NotNull(message = "Latitude may not be null")
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
-    private double lat;
+    private double latitude;
     @NotNull(message = "Longitude may not be null")
     @Range(min = -180, max = 180, message = "Valid longitude is between -180 and 180")
-    private double lng;
+    private double longitude;
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
