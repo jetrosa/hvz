@@ -3,15 +3,13 @@ package noroff.project.hvz.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +20,9 @@ public class ChatMessage {
     @NotNull(message = "Must be defined: visibility in human global chat")
     private boolean isHumanGlobal;
     @NotNull(message = "Must be defined: visibility in zombie global chat")
-    private boolean isZombieLocal;
+    private boolean isZombieGlobal;
     @NotNull(message = "Timestamp may not be null")
-    @Column(name = "begin_date_time")
+    @Column(name = "chat_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime chat_time;
     @NotNull(message = "Game may not be null")

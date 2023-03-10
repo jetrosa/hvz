@@ -1,5 +1,6 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Squad;
 import noroff.project.hvz.repositories.SquadRepository;
 import org.slf4j.Logger;
@@ -16,32 +17,38 @@ public class SquadServiceImpl implements SquadService{
         this.squadRepository=squadRepository;
     }
     @Override
-    public Squad findById(Integer integer) {
-        return null;
+    public Squad findById(Integer id) {
+        return squadRepository.findById(id)
+                .orElseThrow(() -> {
+                            logger.warn("No squad exists with ID: " + id);
+                            return new RecordNotFoundException("Squad", id);
+                        }
+                );
     }
 
     @Override
     public Collection<Squad> findAll() {
-        return null;
+        return squadRepository.findAll();
     }
 
     @Override
     public Squad add(Squad entity) {
-        return null;
+        return squadRepository.save(entity);
     }
 
     @Override
     public Squad update(Squad entity) {
-        return null;
+        return squadRepository.save(entity);
     }
 
     @Override
-    public void deleteById(Integer integer) {
-
+    public void deleteById(Integer id) {
+        delete(findById(id));
     }
 
     @Override
-    public void delete(Squad entity) {
-
+    public void delete(Squad squad) {
+        squadRepository.delete(squad);
+        //todo cascade delete squadCheckin, squadMember
     }
 }

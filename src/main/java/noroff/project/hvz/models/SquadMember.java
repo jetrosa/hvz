@@ -2,13 +2,11 @@ package noroff.project.hvz.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class SquadMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
