@@ -14,8 +14,8 @@ VALUES
 
 INSERT INTO game (game_name, description, game_state, start_date_time, latitude_nw, longitude_nw, latitude_se, longitude_se)
 VALUES
-    ('Test game 1', 'Let''s go!', 'unknown', timestamp '2023-03-10 00:51:14', 60.16040115628537, 24.86448652733676, 60.1583941685908, 24.86845283380156),
-    ('Test game 2', 'Zombie fest', 'unknown', timestamp '2023-04-11 00:51:14', 62.16040115628537, 22.86448652733676, 62.1583941685908, 22.86845283380156);
+    ('Test game 1', 'Let''s go!', 'OPEN', timestamp '2023-03-10 00:51:14', 60.16040115628537, 24.86448652733676, 60.1583941685908, 24.86845283380156),
+    ('Test game 2', 'Zombie fest', 'OPEN', timestamp '2023-04-11 00:51:14', 62.16040115628537, 22.86448652733676, 62.1583941685908, 22.86845283380156);
 
 
 INSERT INTO player (is_human, is_patient_zero, bite_code, app_user_id,  game_id)
@@ -29,14 +29,19 @@ VALUES
     (false, false, 'hw4g', 7,1),
     (false, false, 'hw4h', 8,1),
     (true, false, 'hw4i', 9,1),
-    (true, false, 'hw4j', 10,1);
+    (true, false, 'hw4j', 10,1),
+
+    (true, true, 'hw5a', 1,2),
+    (true, false, 'hw5b', 2,2);
 
 
 INSERT INTO kill (latitude, longitude, time_of_death, game_id, killer_id, victim_id)
 VALUES
     (60.15930173697559, 24.86613540516308, timestamp '2023-03-11 00:52:14',1,1,3),
     (60.160177249786294, 24.86634998188868, timestamp '2023-03-12 00:57:14',1,1,4),
-    (60.158362136307616, 24.865706251711888, timestamp '2023-03-12 00:59:14',1,3,2);
+    (60.158362136307616, 24.865706251711888, timestamp '2023-03-12 00:59:14',1,3,2),
+
+    (60.158362136307616, 24.865706251711888, timestamp '2023-03-12 00:59:14',2,11,12);
 
 
 INSERT INTO squad (is_human, squad_name, game_id)
@@ -44,7 +49,9 @@ VALUES
     (true,'human squad 1',1),
     (true,'human squad 2',1),
     (false,'zombie squad 1',1),
-    (false,'zombie squad 2',1);
+    (false,'zombie squad 2',1),
+
+    (false,'zombie squad game 2',2);
 
 
 INSERT INTO squad_member (rank, player_id, squad_id)
@@ -56,7 +63,9 @@ VALUES
     (0,5,3),
     (0,6,3),
     (0,7,4),
-    (0,8,4);
+    (0,8,4),
+
+    (0,11,5);
 
 
 INSERT INTO squad_checkin (start_date_time, end_date_time, latitude, longitude, game_id, squad_id)
@@ -64,7 +73,9 @@ VALUES
     (timestamp '2023-03-15 00:00:00', timestamp '2023-03-15 00:30:00', 60.15830173697559, 24.86513540516308, 1, 1),
     (timestamp '2023-03-15 00:00:00', timestamp '2023-03-15 00:30:00', 60.15930173697559, 24.86713540516308, 1, 2),
     (timestamp '2023-03-15 00:00:00', timestamp '2023-03-15 00:30:00', 60.16030173697559, 24.86813540516308, 1, 3),
-    (timestamp '2023-03-15 00:00:00',timestamp '2023-03-15 00:30:00', 60.16130173697559, 24.86313540516308, 1, 4);
+    (timestamp '2023-03-15 00:00:00',timestamp '2023-03-15 00:30:00', 60.16130173697559, 24.86313540516308, 1, 4),
+
+    (timestamp '2023-03-15 00:00:00',timestamp '2023-03-15 00:30:00', 60.16130173697559, 24.86313540516308, 2, 5);
 
 
 INSERT INTO mission (mission_name, description, start_date_time, end_date_time, is_human_visible, is_zombie_visible, game_id)
@@ -100,5 +111,7 @@ VALUES
     (timestamp '2023-03-10 00:10:29',false,false,'zombie squad 2 chat message 1', 1,7,4),
     (timestamp '2023-03-10 00:10:30',false,false,'zombie squad 2 chat message 2', 1,7,4),
     (timestamp '2023-03-10 00:10:31',false,false,'zombie squad 2 chat message 3', 1,8,4),
-    (timestamp '2023-03-10 00:10:32',false,false,'zombie squad 2 chat message 4', 1,8,4);
+    (timestamp '2023-03-10 00:10:32',false,false,'zombie squad 2 chat message 4', 1,8,4),
+
+    (timestamp '2023-03-10 00:10:32',true,true,'global chat message game 2', 2,11,5);
 
