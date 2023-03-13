@@ -1,5 +1,5 @@
 package noroff.project.hvz.models;
 
 public enum GameState {
-    OPEN, COMPLETE
+    REGISTRATION, IN_PROGRESS, COMPLETE
 }

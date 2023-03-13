@@ -28,7 +28,7 @@ public class Game {
     private String description;
     @NotNull(message = "Game state may not be null")
     @Enumerated(EnumType.STRING)
-    private GameState gameState = GameState.OPEN;
+    private GameState gameState = GameState.REGISTRATION;
     @NotNull(message = "Start time  may not be null")
     @Column(name = "start_date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")

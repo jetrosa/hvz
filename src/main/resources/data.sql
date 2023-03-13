@@ -14,8 +14,8 @@ VALUES
 
 INSERT INTO game (game_name, description, game_state, start_date_time, latitude_nw, longitude_nw, latitude_se, longitude_se)
 VALUES
-    ('Test game 1', 'Let''s go!', 'OPEN', timestamp '2023-03-10 00:51:14', 60.16040115628537, 24.86448652733676, 60.1583941685908, 24.86845283380156),
-    ('Test game 2', 'Zombie fest', 'OPEN', timestamp '2023-04-11 00:51:14', 62.16040115628537, 22.86448652733676, 62.1583941685908, 22.86845283380156);
+    ('Test game 1', 'Let''s go!', 'REGISTRATION', timestamp '2023-03-10 00:51:14', 60.16040115628537, 24.86448652733676, 60.1583941685908, 24.86845283380156),
+    ('Test game 2', 'Zombie fest', 'REGISTRATION', timestamp '2023-04-11 00:51:14', 62.16040115628537, 22.86448652733676, 62.1583941685908, 22.86845283380156);
 
 
 INSERT INTO player (is_human, is_patient_zero, bite_code, app_user_id,  game_id)
