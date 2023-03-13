@@ -1,8 +1,13 @@
 package noroff.project.hvz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -25,4 +30,10 @@ public class Player {
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "player", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<ChatMessage> chatMessages;
 }

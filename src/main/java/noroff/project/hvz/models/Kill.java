@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 
 import java.time.LocalDateTime;
@@ -26,10 +28,14 @@ public class Kill {
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
+
+    
     @NotNull(message = "Killer (zombie-player) may not be null")
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Player killer;
     @NotNull(message = "Victim (human-player)  may not be null")
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Player victim;
 }
