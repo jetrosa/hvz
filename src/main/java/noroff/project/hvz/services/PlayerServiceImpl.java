@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 public class PlayerServiceImpl implements PlayerService{
@@ -49,6 +50,10 @@ public class PlayerServiceImpl implements PlayerService{
     @Override
     public void delete(Player player) {
         playerRepository.delete(player);
-        //todo chatmessage
+    }
+
+    @Override
+    public Set<Player> findAllByGameId(Integer gameId) {
+        return playerRepository.findAllByGameId(gameId);
     }
 }

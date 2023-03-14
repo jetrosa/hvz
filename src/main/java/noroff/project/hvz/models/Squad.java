@@ -1,9 +1,14 @@
 package noroff.project.hvz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -21,4 +26,19 @@ public class Squad {
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<SquadMember> squadMembers;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<SquadCheckin> squadCheckins;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<ChatMessage> chatMessages;
 }
