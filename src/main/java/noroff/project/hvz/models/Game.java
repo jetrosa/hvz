@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -36,22 +35,9 @@ public class Game {
     @Column(name = "end_date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endDateTime;
-    @NotNull(message = "Game area North West corner latitude may not be null")
-    @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
-    @Column(name = "latitude_nw")
-    private Double latitudeNw;
-    @NotNull(message = "Game area North West corner longitude may not be null")
-    @Range(min = -180, max = 180, message = "Valid longitude is between -180 and 180")
-    @Column(name = "longitude_nw")
-    private Double longitudeNw;
-    @NotNull(message = "Game area South East corner latitude may not be null")
-    @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
-    @Column(name = "latitude_se")
-    private Double latitudeSe;
-    @NotNull(message = "Game area South East corner longitude may not be null")
-    @Range(min = -180, max = 180, message = "Valid longitude is between -180 and 180")
-    @Column(name = "longitude_se")
-    private Double longitudeSe;
+    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<MapCoordinate> mapCoordinates;
 
 
     @JsonIgnore
@@ -61,7 +47,7 @@ public class Game {
     @JsonIgnore
     @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Kill> kills;
+    private Set<Bite> bites;
     @JsonIgnore
     @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)

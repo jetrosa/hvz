@@ -1,5 +1,6 @@
 package noroff.project.hvz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,11 +27,18 @@ public class Squad {
     @ManyToOne
     private Game game;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<SquadMember> squadMembers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<SquadCheckin> squadCheckins;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<ChatMessage> chatMessages;
 }
