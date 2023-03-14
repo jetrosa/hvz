@@ -49,6 +49,5 @@ public class GameServiceImpl implements GameService{
     @Override
     public void delete(Game game) {
         gameRepository.delete(game);
-        //todo delete cascade
     }
 }
