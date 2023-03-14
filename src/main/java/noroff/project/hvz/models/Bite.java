@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Kill {
+public class Bite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -29,7 +29,7 @@ public class Kill {
     @ManyToOne
     private Game game;
 
-    
+
     @NotNull(message = "Killer (zombie-player) may not be null")
     @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
