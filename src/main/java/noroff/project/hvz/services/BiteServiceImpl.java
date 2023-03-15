@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 public class BiteServiceImpl implements BiteService {
@@ -49,5 +50,10 @@ public class BiteServiceImpl implements BiteService {
     @Override
     public void delete(Bite bite) {
         biteRepository.delete(bite);
+    }
+
+    @Override
+    public Set<Bite> findAllByGameId(int gameId) {
+        return biteRepository.findAllByGameId(gameId);
     }
 }
