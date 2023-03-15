@@ -107,12 +107,14 @@ VALUES
 
 INSERT INTO chat_message (chat_time, is_human_global, is_zombie_global, message, game_id, player_id, squad_id)
 VALUES
-    (timestamp '2023-03-10 00:10:11',true,false,'human global chat message 1', 1,1,null),
-    (timestamp '2023-03-10 00:10:12',true,false,'human global chat message 2', 1,1,null),
-    (timestamp '2023-03-10 00:10:13',true,false,'human global chat message 3', 1,1,null),
-    (timestamp '2023-03-10 00:10:14',false,true,'zombie global chat message 1', 1,5,null),
-    (timestamp '2023-03-10 00:10:15',false,true,'zombie global chat message 2', 1,5,null),
-    (timestamp '2023-03-10 00:10:16',false,true,'zombie global chat message 3', 1,6,null),
+    (timestamp '2023-03-10 00:8:11',true,true,'global chat message 1', 1,1,null),
+    (timestamp '2023-03-10 00:9:11',true,true,'global chat message 2', 1,1,null),
+    (timestamp '2023-03-10 00:10:11',true,false,'human faction chat message 1', 1,1,null),
+    (timestamp '2023-03-10 00:10:12',true,false,'human faction chat message 2', 1,1,null),
+    (timestamp '2023-03-10 00:10:13',true,false,'human faction chat message 3', 1,1,null),
+    (timestamp '2023-03-10 00:10:14',false,true,'zombie faction chat message 1', 1,5,null),
+    (timestamp '2023-03-10 00:10:15',false,true,'zombie faction chat message 2', 1,5,null),
+    (timestamp '2023-03-10 00:10:16',false,true,'zombie faction chat message 3', 1,6,null),
     (timestamp '2023-03-10 00:10:17',false,false,'human squad 1 chat message 1', 1,1,1),
     (timestamp '2023-03-10 00:10:18',false,false,'human squad 1 chat message 2', 1,1,1),
     (timestamp '2023-03-10 00:10:19',false,false,'human squad 1 chat message 3', 1,2,1),

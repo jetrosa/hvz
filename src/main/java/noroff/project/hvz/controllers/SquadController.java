@@ -72,12 +72,11 @@ public class SquadController {
     }
 
 
-    @Operation(summary = "Returns a list of faction-specific squad chat messages.")
+    @Operation(summary = "Returns a list of squad chat messages.")
     @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<Set<ChatMessage>> getChatById(@PathVariable int id) {
-        Set<ChatMessage> chatMessages = squadService.findById(id).getChatMessages();
+        Set<ChatMessage> chatMessages = chatMessageService.findAllBySquadId(id);
         return ResponseEntity.ok(chatMessages);
-        //todo faction-specific
     }
 
     @Operation(summary = "Creates a new squad chat message.")

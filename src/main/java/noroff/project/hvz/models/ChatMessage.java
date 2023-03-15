@@ -1,5 +1,6 @@
 package noroff.project.hvz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,6 +26,7 @@ public class ChatMessage {
     @Column(name = "chat_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime chat_time;
+    @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService{
@@ -49,5 +50,20 @@ public class ChatMessageServiceImpl implements ChatMessageService{
     @Override
     public void delete(ChatMessage chatMessage) {
         chatMessageRepository.delete(chatMessage);
+    }
+
+    @Override
+    public Set<ChatMessage> findAllByGameId(int gameId) {
+        return chatMessageRepository.findAllByGameId(gameId);
+    }
+
+    @Override
+    public Set<ChatMessage> findAllBySquadId(int squadId) {
+        return chatMessageRepository.findAllBySquadId(squadId);
+    }
+
+    @Override
+    public Set<ChatMessage> findAllByGameIdAndIsHumanGlobalAndIsZombieGlobal(int gameId, boolean isHumanGlobal, boolean isZombieGlobal) {
+        return chatMessageRepository.findAllByGameIdAndIsHumanGlobalAndIsZombieGlobal(gameId, isHumanGlobal,isZombieGlobal);
     }
 }

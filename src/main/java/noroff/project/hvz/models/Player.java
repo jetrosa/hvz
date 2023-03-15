@@ -27,6 +27,8 @@ public class Player {
     @NotNull(message = "User may not be null")
     @ManyToOne
     private AppUser appUser;
+
+    @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
