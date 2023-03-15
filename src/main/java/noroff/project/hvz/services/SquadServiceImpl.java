@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 public class SquadServiceImpl implements SquadService{
@@ -50,5 +51,10 @@ public class SquadServiceImpl implements SquadService{
     public void delete(Squad squad) {
         squadRepository.delete(squad);
         //todo cascade delete squadCheckin, squadMember
+    }
+
+    @Override
+    public Set<Squad> findAllByGameId(int gameId) {
+        return squadRepository.findAllByGameId(gameId);
     }
 }
