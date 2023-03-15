@@ -3,8 +3,10 @@ package noroff.project.hvz.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Game;
+import noroff.project.hvz.models.Player;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.GameService;
+import noroff.project.hvz.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,12 @@ import java.util.Set;
 public class GameController {
     private final GameService gameService;
     private final ChatMessageService chatMessageService;
+    private final PlayerService playerService;
 
-    public GameController(GameService gameService, ChatMessageService chatMessageService) {
+    public GameController(GameService gameService, ChatMessageService chatMessageService, PlayerService playerService) {
         this.gameService = gameService;
         this.chatMessageService = chatMessageService;
+        this.playerService = playerService;
     }
 
     @Operation(summary = "Returns a list of games.")
@@ -63,10 +67,11 @@ public class GameController {
 
     @Operation(summary = "Returns a list of faction-specific chat messages.")
     @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
-    public ResponseEntity<Set<ChatMessage>> getChatById(@PathVariable int id) {
-        Set<ChatMessage> chatMessages = gameService.findById(id).getChatMessages();
+    public ResponseEntity<Set<ChatMessage>> getChatById(@PathVariable int id, @RequestHeader("player-id") int playerId) {
+        Player player = playerService.findById(playerId);
+        boolean isHuman = player.getIsHuman();
+        Set<ChatMessage> chatMessages = chatMessageService.findAllByGameIdAndIsHumanGlobalAndIsZombieGlobal(id, isHuman, !isHuman);
         return ResponseEntity.ok(chatMessages);
-        //todo faction-specific
     }
 
     @Operation(summary = "Creates a new chat message.")
