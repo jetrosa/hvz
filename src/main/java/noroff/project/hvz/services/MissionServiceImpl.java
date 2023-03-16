@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 public class MissionServiceImpl implements MissionService{
@@ -49,5 +50,10 @@ public class MissionServiceImpl implements MissionService{
     @Override
     public void delete(Mission mission) {
         missionRepository.delete(mission);
+    }
+
+    @Override
+    public Set<Mission> findAllByGameId(int gameId) {
+        return missionRepository.findAllByGameId(gameId);
     }
 }
