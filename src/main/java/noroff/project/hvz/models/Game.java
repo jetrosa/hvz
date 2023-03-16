@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,7 +38,7 @@ public class Game {
     private LocalDateTime endDateTime;
     @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<MapCoordinate> mapCoordinates;
+    private List<MapCoordinate> mapCoordinates;
 
 
     @JsonIgnore
