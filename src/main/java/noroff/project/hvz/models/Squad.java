@@ -23,20 +23,19 @@ public class Squad {
     @NotNull(message = "Squad type may not be null (false: zombie)")
     @Column(name = "is_human")
     private Boolean isHuman;
+
+    @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
-
     @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<SquadMember> squadMembers;
-
     @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<SquadCheckin> squadCheckins;
-
     @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)

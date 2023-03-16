@@ -1,5 +1,6 @@
 package noroff.project.hvz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,15 +26,16 @@ public class Bite {
     private Double latitude;
     @Range(min = -180, max = 180, message = "Valid longitude is between -180 and 180")
     private Double longitude;
+    @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
 
 
-    @NotNull(message = "Killer (zombie-player) may not be null")
+    @NotNull(message = "Biter (zombie-player) may not be null")
     @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Player killer;
+    private Player biter;
     @NotNull(message = "Victim (human-player)  may not be null")
     @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)

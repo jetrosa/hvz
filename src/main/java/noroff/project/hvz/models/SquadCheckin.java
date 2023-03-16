@@ -1,5 +1,6 @@
 package noroff.project.hvz.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -28,9 +29,11 @@ public class SquadCheckin {
     @NotNull(message = "Longitude may not be null")
     @Range(min = -180, max = 180, message = "Valid longitude is between -180 and 180")
     private double longitude;
+    @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne
     private Game game;
+    @JsonIgnore
     @NotNull(message = "Squad may not be null")
     @ManyToOne
     private Squad squad;

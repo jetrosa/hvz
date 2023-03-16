@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping(path = "api/v1/game/{gameId}/bite")
 public class BiteController {
