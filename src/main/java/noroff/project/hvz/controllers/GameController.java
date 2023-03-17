@@ -1,9 +1,11 @@
 package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import noroff.project.hvz.mappers.GameMapper;
 import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.dtos.GameAndCoordinatesDto;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.GameService;
 import noroff.project.hvz.services.PlayerService;
@@ -21,11 +23,13 @@ public class GameController {
     private final GameService gameService;
     private final ChatMessageService chatMessageService;
     private final PlayerService playerService;
+    private final GameMapper gameMapper;
 
-    public GameController(GameService gameService, ChatMessageService chatMessageService, PlayerService playerService) {
+    public GameController(GameService gameService, ChatMessageService chatMessageService, PlayerService playerService,GameMapper gameMapper) {
         this.gameService = gameService;
         this.chatMessageService = chatMessageService;
         this.playerService = playerService;
+        this.gameMapper=gameMapper;
     }
 
     @Operation(summary = "Returns a list of games.")
@@ -44,8 +48,8 @@ public class GameController {
 
     @Operation(summary = "Creates a new game. Admin only.")
     @PostMapping // POST: localhost:8080/api/v1/game
-    public ResponseEntity<?> add(@RequestBody Game game) {
-        gameService.add(game);
+    public ResponseEntity<?> add(@RequestBody GameAndCoordinatesDto g) {
+        gameService.createGameWithMap(gameMapper.toGame(g.getGameDto()), g.getMapCoordinateDtos());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
