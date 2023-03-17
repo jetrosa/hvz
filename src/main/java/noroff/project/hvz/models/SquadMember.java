@@ -15,7 +15,7 @@ public class SquadMember {
     private int id;
     @NotNull(message = "Rank may not be null")
     @Range(min=0)
-    private int rank; //todo:enum?
+    private int rank;
     @NotNull(message = "Squad may not be null")
     @ManyToOne
     private Squad squad;
