@@ -14,7 +14,7 @@ public class AppUser {
     @NotNull(message = "First name may not be null")
     @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters long")
     @Column(name = "first_name")
-    private String firstname;
+    private String firstName;
     @NotNull(message = "Last name may not be null")
     @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters long")
     @Column(name = "last_name")

@@ -1,7 +1,10 @@
 package noroff.project.hvz.services;
 
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
+import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.SquadMember;
+import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.repositories.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,5 +58,17 @@ public class PlayerServiceImpl implements PlayerService{
     @Override
     public Set<Player> findAllByGameId(Integer gameId) {
         return playerRepository.findAllByGameId(gameId);
+    }
+
+    @Override
+    public PlayerWithNameAndSquadDto findPlayerWithNameAndSquadById(int id) {
+        Player  p = findById(id);
+        AppUser a = p.getAppUser();
+        String fullName = a.getFirstName()+" "+a.getLastName();
+        SquadMember s = p.getSquadMember();
+        Integer squadId = null;
+        if(s!=null) squadId = p.getSquadMember().getId();
+
+        return new PlayerWithNameAndSquadDto(p.getIsHuman(),p.getBiteCode(),fullName,squadId);
     }
 }
