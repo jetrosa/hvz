@@ -2,7 +2,10 @@ package noroff.project.hvz.services;
 
 import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
+import noroff.project.hvz.models.AppUser;
+import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.SquadMember;
+import noroff.project.hvz.models.dtos.SquadMemberWithPlayerNameDto;
 import noroff.project.hvz.repositories.SquadMemberRepository;
 import noroff.project.hvz.repositories.SquadRepository;
 import org.slf4j.Logger;
@@ -62,5 +65,17 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         if(remainingSquadMembers.isEmpty()){
             squadRepository.deleteById(squadId);
         }
+    }
+
+    @Override
+    public SquadMemberWithPlayerNameDto getSquadMemberWithPlayerName(SquadMember squadMember) {
+        SquadMemberWithPlayerNameDto dto = new SquadMemberWithPlayerNameDto();
+        Player player = squadMember.getPlayer();
+        AppUser user = player.getAppUser();
+        String fullName = user.getFirstName()+" "+user.getLastName();
+
+        dto.setRank(dto.getRank());
+        dto.setFullName(fullName);
+        return dto;
     }
 }

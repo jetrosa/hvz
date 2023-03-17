@@ -1,10 +1,12 @@
 package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import noroff.project.hvz.mappers.SquadMapper;
 import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Squad;
 import noroff.project.hvz.models.SquadCheckin;
 import noroff.project.hvz.models.SquadMember;
+import noroff.project.hvz.models.dtos.SquadGetDto;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.SquadCheckinService;
 import noroff.project.hvz.services.SquadMemberService;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin(maxAge = 3600)
@@ -24,12 +27,14 @@ public class SquadController {
     private final SquadMemberService squadMemberService;
     private final ChatMessageService chatMessageService;
     private final SquadCheckinService squadCheckinService;
+    private final SquadMapper squadMapper;
 
-    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService){
+    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService, SquadMapper squadMapper){
         this.squadService=squadService;
         this.squadMemberService=squadMemberService;
         this.squadCheckinService=squadCheckinService;
         this.chatMessageService=chatMessageService;
+        this.squadMapper = squadMapper;
     }
 
     @Operation(summary = "Returns a list of squads.")
@@ -41,8 +46,8 @@ public class SquadController {
 
     @Operation(summary = "Returns a specific squad object.")
     @GetMapping("{id}") // GET: localhost:8080/api/v1/game/{gameId}/squad/{squadId}
-    public ResponseEntity<Squad> getById(@PathVariable int id) {
-        Squad squad = squadService.findById(id);
+    public ResponseEntity<SquadGetDto> getById(@PathVariable int id) {
+        SquadGetDto squad = squadMapper.toSquadDto(squadService.findById(id));
         return ResponseEntity.ok(squad);
     }
 
@@ -92,8 +97,8 @@ public class SquadController {
 
     @Operation(summary = "Get a list of squad check-in markers.")
     @GetMapping("{id}/check-in") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
-    public ResponseEntity<Set<SquadCheckin>> getCheckinById(@PathVariable int id) {
-        Set<SquadCheckin> squadCheckins = squadService.findById(id).getSquadCheckins();
+    public ResponseEntity<List<SquadCheckin>> getCheckinById(@PathVariable int id) {
+        List<SquadCheckin> squadCheckins = squadService.findById(id).getSquadCheckins();
         return ResponseEntity.ok(squadCheckins);
     }
 

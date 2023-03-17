@@ -71,7 +71,7 @@ public class PlayerServiceImpl implements PlayerService{
         String fullName = a.getFirstName()+" "+a.getLastName();
         SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
         Integer squadId = null;
-        if(s!=null) squadId = s.getId();
+        if(s!=null) squadId = s.getSquad().getId();
 
         return new PlayerWithNameAndSquadDto(p.getIsHuman(),p.getBiteCode(),fullName,squadId);
     }

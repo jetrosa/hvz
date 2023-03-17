@@ -8,7 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,13 +31,13 @@ public class Squad {
     @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<SquadMember> squadMembers;
+    private List<SquadMember> squadMembers;
     @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<SquadCheckin> squadCheckins;
+    private List<SquadCheckin> squadCheckins;
     @JsonIgnore
     @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<ChatMessage> chatMessages;
+    private List<ChatMessage> chatMessages;
 }
