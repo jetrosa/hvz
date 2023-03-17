@@ -3,6 +3,7 @@ package noroff.project.hvz.services;
 import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.ChatMessage;
+import noroff.project.hvz.models.Player;
 import noroff.project.hvz.repositories.ChatMessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,9 +64,11 @@ public class ChatMessageServiceImpl implements ChatMessageService{
         return chatMessageRepository.findAllBySquadId(squadId);
     }
 
+
     @Transactional
     @Override
-    public Set<ChatMessage> findAllByGameIdAndIsHumanGlobalAndIsZombieGlobal(int gameId, boolean isHumanGlobal, boolean isZombieGlobal) {
-        return chatMessageRepository.findAllByGameIdAndIsHumanGlobalAndIsZombieGlobal(gameId, isHumanGlobal,isZombieGlobal);
+    public Set<ChatMessage> findAllGlobalAndPlayerFactionMessages(int gameId, Player player) {
+        boolean isHumanGlobal = player.getIsHuman();
+        return chatMessageRepository.findAllByGameIdAndIsHumanGlobalAndSquadIsNullOrIsZombieGlobalAndSquadIsNull(gameId, isHumanGlobal, !isHumanGlobal);
     }
 }
