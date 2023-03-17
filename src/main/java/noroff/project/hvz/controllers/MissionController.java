@@ -1,7 +1,10 @@
 package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import noroff.project.hvz.mappers.MissionMapper;
 import noroff.project.hvz.models.Mission;
+import noroff.project.hvz.models.dtos.MissionGetDto;
+import noroff.project.hvz.models.dtos.MissionPostDto;
 import noroff.project.hvz.services.MissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +17,11 @@ import java.util.Collection;
 @RequestMapping(path = "api/v1/game/{gameId}/mission")
 public class MissionController {
     private final MissionService missionService;
+    private final MissionMapper missionMapper;
 
-    public MissionController(MissionService missionService){
+    public MissionController(MissionService missionService, MissionMapper missionMapper){
         this.missionService=missionService;
+        this.missionMapper=missionMapper;
     }
 
     @Operation(summary = "Returns a list of missions.")
@@ -28,15 +33,15 @@ public class MissionController {
 
     @Operation(summary = "Returns a specific mission object.")
     @GetMapping("{id}") // GET: localhost:8080/api/v1/game/{gameId}/mission/{missionId}
-    public ResponseEntity<Mission> getById(@PathVariable int id) {
-        Mission mission = missionService.findById(id);
+    public ResponseEntity<MissionGetDto> getById(@PathVariable int id) {
+        MissionGetDto mission = missionMapper.toMissionDto(missionService.findById(id)) ;
         return ResponseEntity.ok(mission);
     }
 
     @Operation(summary = "Creates a mission object.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/mission/
-    public ResponseEntity<?> add(@RequestBody Mission mission) {
-        missionService.add(mission);
+    public ResponseEntity<?> add(@PathVariable int gameId, @RequestBody MissionPostDto mission) {
+        missionService.add(missionMapper.toMission(mission, gameId));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
