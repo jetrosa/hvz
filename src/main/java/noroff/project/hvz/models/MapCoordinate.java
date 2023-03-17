@@ -3,11 +3,13 @@ package noroff.project.hvz.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class MapCoordinate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

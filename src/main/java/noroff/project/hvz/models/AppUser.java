@@ -3,10 +3,12 @@ package noroff.project.hvz.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
