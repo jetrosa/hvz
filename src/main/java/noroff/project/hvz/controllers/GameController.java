@@ -74,8 +74,7 @@ public class GameController {
     @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<Set<ChatMessage>> getChatById(@PathVariable int id, @RequestHeader("player-id") int playerId) {
         Player player = playerService.findById(playerId);
-        boolean isHuman = player.getIsHuman();
-        Set<ChatMessage> chatMessages = chatMessageService.findAllByGameIdAndIsHumanGlobalAndIsZombieGlobal(id, isHuman, !isHuman);
+        Set<ChatMessage> chatMessages = chatMessageService.findAllGlobalAndPlayerFactionMessages(id, player);
         return ResponseEntity.ok(chatMessages);
     }
 
