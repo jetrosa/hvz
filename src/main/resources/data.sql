@@ -51,7 +51,7 @@ VALUES
     (true, false, 'hw5b', 2,2);
 
 
-INSERT INTO bite (latitude, longitude, time_of_death, game_id, killer_id, victim_id)
+INSERT INTO bite (latitude, longitude, time_of_death, game_id, biter_id, victim_id)
 VALUES
     (24.9671173, 60.1819467, timestamp '2023-03-11 00:52:14',1,1,3),
     (24.9683189, 60.1814986, timestamp '2023-03-12 00:57:14',1,1,4),

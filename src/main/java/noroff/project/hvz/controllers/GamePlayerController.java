@@ -2,6 +2,7 @@ package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,39 +22,39 @@ public class GamePlayerController {
 
 
     @Operation(summary = "Get a list of players.")
-    @GetMapping // GET: localhost:8080/api/v1/game/1/player
+    @GetMapping // GET: localhost:8080/api/v1/game/{gameId}/player
     public ResponseEntity<Collection<Player>> getAll(@PathVariable int gameId) {
         Collection<Player> players = playerService.findAllByGameId(gameId);
         return ResponseEntity.ok(players);
     }
 
     @Operation(summary = "Returns a specific player object.")
-    @GetMapping("{id}") // GET: localhost:8080/api/v1/game/1/player/1
-    public ResponseEntity<Player> getById(@PathVariable int id) {
-        Player player = playerService.findById(id);
+    @GetMapping("{playerId}") // GET: localhost:8080/api/v1/game/{gameId}/player/{playerId}
+    public ResponseEntity<PlayerWithNameAndSquadDto> getById(@PathVariable int playerId) {
+        PlayerWithNameAndSquadDto player = playerService.findPlayerWithNameAndSquadById(playerId);
         return ResponseEntity.ok(player);
     }
 
     @Operation(summary = "Creates a new player. Admin only.")
-    @PostMapping // POST: localhost:8080/api/v1/game/1/player/
+    @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/player/
     public ResponseEntity<?> add(@RequestBody Player player) {
         playerService.add(player);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Updates a player. Admin only.")
-    @PutMapping("{id}") // PUT: localhost:8080/api/v1/game/1/player/1
-    public ResponseEntity<?> update(@RequestBody Player player, @PathVariable int id) {
-        if (id != player.getId())
+    @PutMapping("{playerId}") // PUT: localhost:8080/api/v1/game/{gameId}/player/{playerId}
+    public ResponseEntity<?> update(@RequestBody Player player, @PathVariable int playerId) {
+        if (playerId != player.getId())
             return ResponseEntity.badRequest().build();
         playerService.update(player);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Deletes (cascading) a player. Admin only.")
-    @DeleteMapping("{id}") // DELETE: localhost:8080/api/v1/game/1/player/1
-    public ResponseEntity<?> delete(@PathVariable int id) {
-        playerService.deleteById(id);
+    @DeleteMapping("{playerId}") // DELETE: localhost:8080/api/v1/game/{gameId}/player/{playerId}
+    public ResponseEntity<?> delete(@PathVariable int playerId) {
+        playerService.deleteById(playerId);
         return ResponseEntity.noContent().build();
     }
 

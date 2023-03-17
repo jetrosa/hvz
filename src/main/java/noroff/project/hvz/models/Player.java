@@ -33,9 +33,12 @@ public class Player {
     @ManyToOne
     private Game game;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "player", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ChatMessage> chatMessages;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "player")
+    SquadMember squadMember;
 }
