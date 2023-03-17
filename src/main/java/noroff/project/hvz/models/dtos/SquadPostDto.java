@@ -11,7 +11,4 @@ public class SquadPostDto {
     private String name;
     @NotNull(message = "Squad type may not be null (false: zombie)")
     private Boolean isHuman;
-
-    @NotNull(message = "Game may not be null")
-    private Integer gameId;
 }
