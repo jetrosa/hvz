@@ -6,6 +6,7 @@ import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.dtos.GameAndCoordinatesDto;
+import noroff.project.hvz.models.dtos.GamePostDto;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.GameService;
 import noroff.project.hvz.services.PlayerService;
@@ -55,10 +56,15 @@ public class GameController {
 
     @Operation(summary = "Updates a game. Admin only.")
     @PutMapping("{id}") // PUT: localhost:8080/api/v1/game/<game_id>
-    public ResponseEntity<?> update(@RequestBody Game game, @PathVariable int id) {
-        if (id != game.getId())
-            return ResponseEntity.badRequest().build();
-        gameService.update(game);
+    public ResponseEntity<?> update(@RequestBody GamePostDto game, @PathVariable int id) {
+        //if (id != game.getId())
+        //    return ResponseEntity.badRequest().build();
+        Game g = gameService.findById(id);
+        g.setName(game.getName());
+        g.setDescription(game.getDescription());
+        g.setStartDateTime(game.getStartDateTime());
+        g.setEndDateTime(game.getEndDateTime());
+        gameService.update(g);
         return ResponseEntity.noContent().build();
     }
 

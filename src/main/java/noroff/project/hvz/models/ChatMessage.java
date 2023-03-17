@@ -5,14 +5,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
