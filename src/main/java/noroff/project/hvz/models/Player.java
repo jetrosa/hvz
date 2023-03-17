@@ -38,7 +38,7 @@ public class Player {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ChatMessage> chatMessages;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "player")
-    SquadMember squadMember;
+   // @JsonIgnore
+    //@OneToOne(mappedBy = "player")
+   // SquadMember squadMember;
 }
