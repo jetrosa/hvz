@@ -3,8 +3,10 @@ package noroff.project.hvz.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Squad;
+import noroff.project.hvz.models.SquadCheckin;
 import noroff.project.hvz.models.SquadMember;
 import noroff.project.hvz.services.ChatMessageService;
+import noroff.project.hvz.services.SquadCheckinService;
 import noroff.project.hvz.services.SquadMemberService;
 import noroff.project.hvz.services.SquadService;
 import org.springframework.http.HttpStatus;
@@ -21,10 +23,12 @@ public class SquadController {
     private final SquadService squadService;
     private final SquadMemberService squadMemberService;
     private final ChatMessageService chatMessageService;
+    private final SquadCheckinService squadCheckinService;
 
-    public SquadController(SquadService squadService, SquadMemberService squadMemberService, ChatMessageService chatMessageService){
+    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService){
         this.squadService=squadService;
         this.squadMemberService=squadMemberService;
+        this.squadCheckinService=squadCheckinService;
         this.chatMessageService=chatMessageService;
     }
 
@@ -42,7 +46,7 @@ public class SquadController {
         return ResponseEntity.ok(squad);
     }
 
-    @Operation(summary = "Creates a squad member object.")
+    @Operation(summary = "Creates a squad member object (join a squad).")
     @PostMapping ("{squad_id}/join")// POST: localhost:8080/api/v1/game/{gameId}/squad/<squad_id>/join
     public ResponseEntity<?> join(@RequestBody SquadMember squadMember) {
         squadMemberService.add(squadMember);
@@ -72,21 +76,33 @@ public class SquadController {
         return ResponseEntity.noContent().build();
     }
 
-
     @Operation(summary = "Returns a list of squad chat messages.")
-    @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
+    @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/chat
     public ResponseEntity<Set<ChatMessage>> getChatById(@PathVariable int id) {
         Set<ChatMessage> chatMessages = chatMessageService.findAllBySquadId(id);
         return ResponseEntity.ok(chatMessages);
     }
 
     @Operation(summary = "Creates a new squad chat message.")
-    @PostMapping("{id}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
+    @PostMapping("{id}/chat") // POST: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/chat
     public ResponseEntity<?> add(@RequestBody ChatMessage chatMessage) {
         chatMessageService.add(chatMessage);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Operation(summary = "Get a list of squad check-in markers.")
+    @GetMapping("{id}/check-in") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
+    public ResponseEntity<Set<SquadCheckin>> getCheckinById(@PathVariable int id) {
+        Set<SquadCheckin> squadCheckins = squadService.findById(id).getSquadCheckins();
+        return ResponseEntity.ok(squadCheckins);
+    }
+
+    @Operation(summary = "Create a squad checkin.")
+    @PostMapping("{id}/check-in") // POST: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
+    public ResponseEntity<?> addCheckin(@RequestBody SquadCheckin squadCheckin) {
+        squadCheckinService.add(squadCheckin);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
 
     /*

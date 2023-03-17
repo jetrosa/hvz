@@ -6,6 +6,7 @@ import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.SquadMember;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.repositories.PlayerRepository;
+import noroff.project.hvz.repositories.SquadMemberRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,11 @@ import java.util.Set;
 public class PlayerServiceImpl implements PlayerService{
     private final PlayerRepository playerRepository;
     private final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
-    public PlayerServiceImpl(PlayerRepository playerRepository){
+    private final SquadMemberRepository squadMemberRepository;
+
+    public PlayerServiceImpl(PlayerRepository playerRepository, SquadMemberRepository squadMemberRepository){
         this.playerRepository=playerRepository;
+        this.squadMemberRepository = squadMemberRepository;
     }
     @Override
     public Player findById(Integer id) {
@@ -65,9 +69,9 @@ public class PlayerServiceImpl implements PlayerService{
         Player  p = findById(id);
         AppUser a = p.getAppUser();
         String fullName = a.getFirstName()+" "+a.getLastName();
-        SquadMember s = p.getSquadMember();
+        SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
         Integer squadId = null;
-        if(s!=null) squadId = p.getSquadMember().getId();
+        if(s!=null) squadId = s.getId();
 
         return new PlayerWithNameAndSquadDto(p.getIsHuman(),p.getBiteCode(),fullName,squadId);
     }
