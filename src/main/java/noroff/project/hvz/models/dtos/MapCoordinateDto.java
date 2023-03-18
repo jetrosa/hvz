@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MapCoordinateDto {
-    Double latitude;
-    Double longitude;
+    private Double latitude;
+    private Double longitude;
 }

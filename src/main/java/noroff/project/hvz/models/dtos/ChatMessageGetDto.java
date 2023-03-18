@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ChatMessageGetDto {
     private int id;
     private String message;
-    private boolean isHumanGlobal;
-    private boolean isZombieGlobal;
+    private Boolean isHumanGlobal;
+    private Boolean isZombieGlobal;
     private LocalDateTime chat_time;
 }
