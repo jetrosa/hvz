@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Getter
 @Setter
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "squad_id", "player_id" }) })
 public class SquadMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +24,6 @@ public class SquadMember {
     @NotNull(message = "Player may not be null")
     @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="player_id")
+    @JoinColumn(name="player_id", unique=true)
     private Player player;
 }
