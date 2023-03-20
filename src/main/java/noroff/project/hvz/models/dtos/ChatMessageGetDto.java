@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class ChatMessageGetDto {
-    private int id;
     private String message;
     private Boolean isHumanGlobal;
     private Boolean isZombieGlobal;

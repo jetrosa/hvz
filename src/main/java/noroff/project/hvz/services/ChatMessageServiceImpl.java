@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.Squad;
 import noroff.project.hvz.models.dtos.ChatMessageGetDto;
 import noroff.project.hvz.repositories.ChatMessageRepository;
 import org.slf4j.Logger;
@@ -46,8 +47,10 @@ public class ChatMessageServiceImpl implements ChatMessageService{
 
     @Override
     public void addSquadChat(ChatMessage message, int squadId) {
-        if(squadService.existsById(squadId))
+        Squad s = squadService.findById(squadId);
+        if(s!=null)
         {
+            message.setSquad(s);
             add(message);
         }
     }
