@@ -57,9 +57,4 @@ public class SquadServiceImpl implements SquadService{
     public Set<Squad> findAllByGameId(int gameId) {
         return squadRepository.findAllByGameId(gameId);
     }
-
-    @Override
-    public boolean existsById(int squadId) {
-        return squadRepository.existsById(squadId);
-    }
 }
