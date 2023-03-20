@@ -10,4 +10,5 @@ import java.util.Set;
 public interface SquadMemberRepository extends JpaRepository<SquadMember, Integer> {
     SquadMember findByPlayerId(final int playerId);
     Set<SquadMember> findAllBySquadId(final int squadId);
+    boolean existsBySquadIdAndPlayerId(final int squadId, final int playerId);
 }

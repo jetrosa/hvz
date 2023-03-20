@@ -1,13 +1,14 @@
 package noroff.project.hvz.services;
 
 import jakarta.transaction.Transactional;
+import noroff.project.hvz.customexceptions.DuplicateKeyException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.Squad;
 import noroff.project.hvz.models.SquadMember;
 import noroff.project.hvz.models.dtos.SquadMemberWithPlayerNameDto;
 import noroff.project.hvz.repositories.SquadMemberRepository;
-import noroff.project.hvz.repositories.SquadRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,15 @@ import java.util.Set;
 
 @Service
 public class SquadMemberServiceImpl implements  SquadMemberService{
-    private final SquadRepository squadRepository;
+    private final SquadService squadService;
     private final SquadMemberRepository squadMemberRepository;
     private final Logger logger = LoggerFactory.getLogger(SquadMemberServiceImpl.class);
+    private final PlayerService playerService;
 
-    public SquadMemberServiceImpl(SquadMemberRepository squadMemberRepository, SquadRepository squadRepository){
+    public SquadMemberServiceImpl(SquadMemberRepository squadMemberRepository, SquadService squadService, PlayerService playerService){
         this.squadMemberRepository=squadMemberRepository;
-        this.squadRepository=squadRepository;
+        this.squadService=squadService;
+        this.playerService=playerService;
     }
     @Override
     public SquadMember findById(Integer id) {
@@ -63,7 +66,7 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         squadMemberRepository.delete(squadMember);
         Set<SquadMember> remainingSquadMembers = squadMemberRepository.findAllBySquadId(squadId);
         if(remainingSquadMembers.isEmpty()){
-            squadRepository.deleteById(squadId);
+            squadService.deleteById(squadId);
         }
     }
 
@@ -78,4 +81,27 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         dto.setFullName(fullName);
         return dto;
     }
+
+    @Override
+    public void joinSquad(int squadId, int playerId) {
+        if(squadMemberRepository.existsBySquadIdAndPlayerId(squadId, playerId))
+            throw new DuplicateKeyException("squad_id, player_id");
+
+        Squad squad = squadService.findById(squadId);
+        Player player = playerService.findById(playerId);
+        SquadMember s = new SquadMember();
+        s.setSquad(squad);
+        s.setPlayer(player);
+        add(s);
+    }
+
+    @Override
+    public void leaveSquad(int playerId) {
+        SquadMember s = squadMemberRepository.findByPlayerId(playerId);
+        if(s==null){
+            throw new RecordNotFoundException("squad member", playerId);
+        }else
+            delete(s);
+    }
+
 }

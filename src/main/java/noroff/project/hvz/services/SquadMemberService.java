@@ -5,4 +5,6 @@ import noroff.project.hvz.models.dtos.SquadMemberWithPlayerNameDto;
 
 public interface SquadMemberService extends CrudService<SquadMember, Integer> {
     SquadMemberWithPlayerNameDto getSquadMemberWithPlayerName(SquadMember squadMember);
+    void leaveSquad(int playerId);
+    void joinSquad(int squadId, int playerId);
 }

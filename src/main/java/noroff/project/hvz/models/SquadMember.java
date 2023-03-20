@@ -11,13 +11,14 @@ import org.hibernate.validator.constraints.Range;
 @Entity
 @Getter
 @Setter
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "squad_id", "player_id" }) })
 public class SquadMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull(message = "Rank may not be null")
     @Range(min=0)
-    private int rank;
+    private int rank = 0;
     @NotNull(message = "Squad may not be null")
     @ManyToOne
     private Squad squad;
