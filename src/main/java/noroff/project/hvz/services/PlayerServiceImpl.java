@@ -2,9 +2,11 @@ package noroff.project.hvz.services;
 
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.AppUser;
+import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.SquadMember;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
+import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadWithoutBiteCodeDto;
 import noroff.project.hvz.repositories.PlayerRepository;
 import noroff.project.hvz.repositories.SquadMemberRepository;
 import org.slf4j.Logger;
@@ -45,6 +47,17 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     @Override
+    public Player addWithDefaultValues(AppUser a, Game g) {
+        Player player = new Player();
+        player.setAppUser(a);
+        player.setGame(g);
+        player.setIsHuman(true);
+        player.setBiteCode(generateBiteCode());
+
+        return playerRepository.save(player);
+    }
+
+    @Override
     public Player update(Player entity) {
         return playerRepository.save(entity);
     }
@@ -65,8 +78,8 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     @Override
-    public PlayerWithNameAndSquadDto findPlayerWithNameAndSquadById(int id) {
-        Player  p = findById(id);
+    public PlayerWithNameAndSquadDto findPlayerWithNameAndSquadById(int playerId) {
+        Player  p = findById(playerId);
         AppUser a = p.getAppUser();
         String fullName = a.getFirstName()+" "+a.getLastName();
         SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
@@ -74,5 +87,20 @@ public class PlayerServiceImpl implements PlayerService{
         if(s!=null) squadId = s.getSquad().getId();
 
         return new PlayerWithNameAndSquadDto(p.getIsHuman(),p.getBiteCode(),fullName,squadId);
+    }
+
+    @Override
+    public PlayerWithNameAndSquadWithoutBiteCodeDto findPlayerWithNameAndSquadByIdWithoutBiteCode(Player p) {
+        AppUser a = p.getAppUser();
+        String fullName = a.getFirstName()+" "+a.getLastName();
+        SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
+        Integer squadId = null;
+        if(s!=null) squadId = s.getSquad().getId();
+
+        return new PlayerWithNameAndSquadWithoutBiteCodeDto(p.getIsHuman(),fullName,squadId);
+    }
+
+    private String generateBiteCode(){
+        return "";
     }
 }

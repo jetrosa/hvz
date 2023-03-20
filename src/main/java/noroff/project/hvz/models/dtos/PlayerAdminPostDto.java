@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PlayerPostDto {
+public class PlayerAdminPostDto {
     @NotNull(message = "User id may not be null")
     private Integer userId;
 }

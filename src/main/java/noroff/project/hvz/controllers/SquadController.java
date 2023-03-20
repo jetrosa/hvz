@@ -1,11 +1,13 @@
 package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import noroff.project.hvz.mappers.ChatMessageMapper;
 import noroff.project.hvz.mappers.SquadMapper;
-import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Squad;
 import noroff.project.hvz.models.SquadCheckin;
 import noroff.project.hvz.models.SquadMember;
+import noroff.project.hvz.models.dtos.ChatMessageGetDto;
+import noroff.project.hvz.models.dtos.ChatMessageSquadPostDto;
 import noroff.project.hvz.models.dtos.SquadGetDto;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.SquadCheckinService;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -28,13 +29,15 @@ public class SquadController {
     private final ChatMessageService chatMessageService;
     private final SquadCheckinService squadCheckinService;
     private final SquadMapper squadMapper;
+    private final ChatMessageMapper chatMessageMapper;
 
-    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService, SquadMapper squadMapper){
+    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService, SquadMapper squadMapper, ChatMessageMapper chatMessageMapper){
         this.squadService=squadService;
         this.squadMemberService=squadMemberService;
         this.squadCheckinService=squadCheckinService;
         this.chatMessageService=chatMessageService;
         this.squadMapper = squadMapper;
+        this.chatMessageMapper = chatMessageMapper;
     }
 
     @Operation(summary = "Returns a list of squads.")
@@ -83,15 +86,15 @@ public class SquadController {
 
     @Operation(summary = "Returns a list of squad chat messages.")
     @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/chat
-    public ResponseEntity<Set<ChatMessage>> getChatById(@PathVariable int id) {
-        Set<ChatMessage> chatMessages = chatMessageService.findAllBySquadId(id);
+    public ResponseEntity<List<ChatMessageGetDto>> getChatById(@PathVariable int id) {
+        List<ChatMessageGetDto> chatMessages = chatMessageService.findAllBySquadId(id);
         return ResponseEntity.ok(chatMessages);
     }
 
     @Operation(summary = "Creates a new squad chat message.")
-    @PostMapping("{id}/chat") // POST: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/chat
-    public ResponseEntity<?> add(@RequestBody ChatMessage chatMessage) {
-        chatMessageService.add(chatMessage);
+    @PostMapping("{squadId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
+    public ResponseEntity<?> add(@PathVariable int gameId, @PathVariable int squadId, @RequestHeader("player-id") int playerId, @RequestBody ChatMessageSquadPostDto chatMessage) {
+        chatMessageService.addSquadChat(chatMessageMapper.toSquadChatMessage(chatMessage, gameId, playerId),squadId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -35,7 +35,7 @@ public class GamePlayerController {
         return ResponseEntity.ok(player);
     }
 
-    @Operation(summary = "Creates a new player. Admin only.")
+    @Operation(summary = "Creates a new player.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/player/
     public ResponseEntity<?> add(@RequestBody Player player) {
         playerService.add(player);

@@ -11,4 +11,5 @@ public class ChatMessageGetDto {
     private Boolean isHumanGlobal;
     private Boolean isZombieGlobal;
     private LocalDateTime chat_time;
+    private PlayerWithNameAndSquadWithoutBiteCodeDto player;
 }
