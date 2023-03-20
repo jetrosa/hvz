@@ -14,6 +14,7 @@ import java.util.Set;
 public class SquadServiceImpl implements SquadService{
     private final SquadRepository squadRepository;
     private final Logger logger = LoggerFactory.getLogger(SquadServiceImpl.class);
+
     public SquadServiceImpl(SquadRepository squadRepository){
         this.squadRepository=squadRepository;
     }
@@ -43,6 +44,15 @@ public class SquadServiceImpl implements SquadService{
     }
 
     @Override
+    public Squad updateKeepRelations(Squad updatedSquad) {
+        Squad oldSquad = findById(updatedSquad.getId());
+        updatedSquad.setSquadCheckins(oldSquad.getSquadCheckins());
+        updatedSquad.setSquadMembers(oldSquad.getSquadMembers());
+        updatedSquad.setChatMessages(oldSquad.getChatMessages());
+        return squadRepository.save(updatedSquad);
+    }
+
+    @Override
     public void deleteById(Integer id) {
         delete(findById(id));
     }
@@ -50,7 +60,6 @@ public class SquadServiceImpl implements SquadService{
     @Override
     public void delete(Squad squad) {
         squadRepository.delete(squad);
-        //todo cascade delete squadCheckin, squadMember
     }
 
     @Override

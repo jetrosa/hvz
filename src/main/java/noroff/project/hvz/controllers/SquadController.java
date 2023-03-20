@@ -3,7 +3,6 @@ package noroff.project.hvz.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.mappers.ChatMessageMapper;
 import noroff.project.hvz.mappers.SquadMapper;
-import noroff.project.hvz.mappers.SquadMemberMapper;
 import noroff.project.hvz.models.Squad;
 import noroff.project.hvz.models.SquadCheckin;
 import noroff.project.hvz.models.dtos.ChatMessageGetDto;
@@ -31,14 +30,12 @@ public class SquadController {
     private final SquadCheckinService squadCheckinService;
     private final SquadMapper squadMapper;
     private final ChatMessageMapper chatMessageMapper;
-    private final SquadMemberMapper squadMemberMapper;
 
-    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadMemberMapper squadMemberMapper, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService, SquadMapper squadMapper, ChatMessageMapper chatMessageMapper){
-        this.squadService=squadService;
-        this.squadMemberService=squadMemberService;
-        this.squadMemberMapper=squadMemberMapper;
-        this.squadCheckinService=squadCheckinService;
-        this.chatMessageService=chatMessageService;
+    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService, SquadMapper squadMapper, ChatMessageMapper chatMessageMapper) {
+        this.squadService = squadService;
+        this.squadMemberService = squadMemberService;
+        this.squadCheckinService = squadCheckinService;
+        this.chatMessageService = chatMessageService;
         this.squadMapper = squadMapper;
         this.chatMessageMapper = chatMessageMapper;
     }
@@ -58,53 +55,51 @@ public class SquadController {
     }
 
     @Operation(summary = "Creates a squad member object (join a squad).")
-    @PostMapping ("{squadId}/join")// POST: localhost:8080/api/v1/game/{gameId}/squad/<squadId>/join
+    @PostMapping("{squadId}/join")// POST: localhost:8080/api/v1/game/{gameId}/squad/<squadId>/join
     public ResponseEntity<?> join(@PathVariable int gameId, @PathVariable int squadId, @RequestHeader("player-id") int playerId) {
         squadMemberService.joinSquad(squadId, playerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Deletes a squad member object (leave a squad).")
-    @DeleteMapping ("leave")// DELETE: localhost:8080/api/v1/game/{gameId}/squad/leave
+    @DeleteMapping("leave")// DELETE: localhost:8080/api/v1/game/{gameId}/squad/leave
     public ResponseEntity<?> leave(@PathVariable int gameId, @RequestHeader("player-id") int playerId) {
         squadMemberService.leaveSquad(playerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Creates a squad object.")
-    @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/squad/
-    public ResponseEntity<?> add(@RequestBody SquadPostDto squad) {
-        squadService.add(squadMapper.toSquad(squad));
+    @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/squad
+    public ResponseEntity<?> add(@PathVariable int gameId, @RequestBody SquadPostDto squad, @RequestHeader("player-id") int playerId) {
+        squadMemberService.createAndJoin(squadMapper.toSquad(squad, gameId), playerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Updates a squad object. Admin only.")
-    @PutMapping("{id}") // PUT: localhost:8080/api/v1/game/{gameId}/squad/{squadId}
-    public ResponseEntity<?> update(@RequestBody Squad squad, @PathVariable int id) {
-        if (id != squad.getId())
-            return ResponseEntity.badRequest().build();
-        squadService.update(squad);
+    @PutMapping("{squadId}") // PUT: localhost:8080/api/v1/game/{gameId}/squad/{squadId}
+    public ResponseEntity<?> update(@RequestBody SquadPostDto squad, @PathVariable int squadId) {
+        squadService.updateKeepRelations(squadMapper.toSquad(squad, squadId));
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Deletes a squad. Admin only.")
-    @DeleteMapping("{id}") // DELETE: localhost:8080/api/v1/game/{gameId}/squad/{squadId}
-    public ResponseEntity<?> delete(@PathVariable int id) {
-        squadService.deleteById(id);
+    @DeleteMapping("{squadId}") // DELETE: localhost:8080/api/v1/game/{gameId}/squad/{squadId}
+    public ResponseEntity<?> delete(@PathVariable int squadId) {
+        squadService.deleteById(squadId);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Returns a list of squad chat messages.")
-    @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/chat
-    public ResponseEntity<List<ChatMessageGetDto>> getChatById(@PathVariable int id) {
-        List<ChatMessageGetDto> chatMessages = chatMessageService.findAllBySquadId(id);
+    @GetMapping("{squadId}/chat") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/chat
+    public ResponseEntity<List<ChatMessageGetDto>> getChatById(@PathVariable int squadId) {
+        List<ChatMessageGetDto> chatMessages = chatMessageService.findAllBySquadId(squadId);
         return ResponseEntity.ok(chatMessages);
     }
 
     @Operation(summary = "Creates a new squad chat message.")
     @PostMapping("{squadId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<?> add(@PathVariable int gameId, @PathVariable int squadId, @RequestHeader("player-id") int playerId, @RequestBody ChatMessageSquadPostDto chatMessage) {
-        chatMessageService.addSquadChat(chatMessageMapper.toSquadChatMessage(chatMessage, gameId, playerId),squadId);
+        chatMessageService.addSquadChat(chatMessageMapper.toSquadChatMessage(chatMessage, gameId, playerId), squadId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

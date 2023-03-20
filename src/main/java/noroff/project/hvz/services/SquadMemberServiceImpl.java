@@ -84,8 +84,8 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
 
     @Override
     public void joinSquad(int squadId, int playerId) {
-        if(squadMemberRepository.existsBySquadIdAndPlayerId(squadId, playerId))
-            throw new DuplicateKeyException("squad_id, player_id");
+        if(squadMemberRepository.existsByPlayerId(playerId))
+            throw new DuplicateKeyException("player_id");
 
         Squad squad = squadService.findById(squadId);
         Player player = playerService.findById(playerId);
@@ -95,6 +95,7 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         add(s);
     }
 
+    @Transactional
     @Override
     public void leaveSquad(int playerId) {
         SquadMember s = squadMemberRepository.findByPlayerId(playerId);
@@ -102,6 +103,17 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
             throw new RecordNotFoundException("squad member", playerId);
         }else
             delete(s);
+    }
+
+    @Transactional
+    @Override
+    public void createAndJoin(Squad squad, int playerId) {
+        if(squadMemberRepository.existsByPlayerId(playerId))
+            throw new DuplicateKeyException("player_id");
+        Player player = playerService.findById(playerId);
+        squad.setIsHuman(player.getIsHuman());
+        Squad createdSquad = squadService.add(squad);
+        joinSquad(createdSquad.getId(), playerId);
     }
 
 }

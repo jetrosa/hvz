@@ -23,9 +23,7 @@ public class Squad {
     @Column(name = "squad_name")
     private String name;
     @NotNull(message = "Squad type may not be null (false: zombie)")
-    @Column(name = "is_human")
     private Boolean isHuman;
-
     @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne
