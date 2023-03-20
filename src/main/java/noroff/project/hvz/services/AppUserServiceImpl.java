@@ -53,4 +53,9 @@ public class AppUserServiceImpl implements AppUserService {
         appUserRepository.delete(appUser);
         //todo player
     }
+
+    @Override
+    public boolean existsByUuid(String uuid) {
+        return appUserRepository.existsByUuid(uuid);
+    }
 }
