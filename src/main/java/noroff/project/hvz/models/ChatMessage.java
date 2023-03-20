@@ -23,9 +23,9 @@ public class ChatMessage {
     @Size(min = 1, max = 300, message = "Message must be between 1 and 300 characters long")
     private String message;
     @NotNull(message = "Must be defined: visibility in human global chat")
-    private boolean isHumanGlobal;
+    private Boolean isHumanGlobal;
     @NotNull(message = "Must be defined: visibility in zombie global chat")
-    private boolean isZombieGlobal;
+    private Boolean isZombieGlobal;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "chat_time")

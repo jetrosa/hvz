@@ -1,12 +1,11 @@
 package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import noroff.project.hvz.mappers.ChatMessageMapper;
 import noroff.project.hvz.mappers.GameMapper;
-import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
-import noroff.project.hvz.models.dtos.GameAndCoordinatesDto;
-import noroff.project.hvz.models.dtos.GamePostDto;
+import noroff.project.hvz.models.dtos.*;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.GameService;
 import noroff.project.hvz.services.PlayerService;
@@ -15,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -25,25 +24,27 @@ public class GameController {
     private final ChatMessageService chatMessageService;
     private final PlayerService playerService;
     private final GameMapper gameMapper;
+    private final ChatMessageMapper chatMessageMapper;
 
-    public GameController(GameService gameService, ChatMessageService chatMessageService, PlayerService playerService,GameMapper gameMapper) {
+    public GameController(GameService gameService, ChatMessageService chatMessageService, PlayerService playerService, GameMapper gameMapper, ChatMessageMapper chatMessageMapper) {
         this.gameService = gameService;
         this.chatMessageService = chatMessageService;
         this.playerService = playerService;
         this.gameMapper=gameMapper;
+        this.chatMessageMapper = chatMessageMapper;
     }
 
     @Operation(summary = "Returns a list of games.")
     @GetMapping // GET: localhost:8080/api/v1/game
-    public ResponseEntity<Collection<Game>> getAll() {
-        Collection<Game> games = gameService.findAll();
+    public ResponseEntity<Collection<GameGetDto>> getAll() {
+        Collection<GameGetDto> games = gameMapper.toGameDto(gameService.findAll());
         return ResponseEntity.ok(games);
     }
 
     @Operation(summary = "Returns a specific game object.")
-    @GetMapping("{id}") // GET: localhost:8080/api/v1/game
-    public ResponseEntity<Game> getById(@PathVariable int id) {
-        Game game = gameService.findById(id);
+    @GetMapping("{gameId}") // GET: localhost:8080/api/v1/game
+    public ResponseEntity<GameGetDto> getById(@PathVariable int gameId) {
+        GameGetDto game = gameMapper.toGameDto(gameService.findById(gameId));
         return ResponseEntity.ok(game);
     }
 
@@ -55,11 +56,11 @@ public class GameController {
     }
 
     @Operation(summary = "Updates a game. Admin only.")
-    @PutMapping("{id}") // PUT: localhost:8080/api/v1/game/<game_id>
-    public ResponseEntity<?> update(@RequestBody GamePostDto game, @PathVariable int id) {
+    @PutMapping("{gameId}") // PUT: localhost:8080/api/v1/game/<game_id>
+    public ResponseEntity<?> update(@RequestBody GamePostDto game, @PathVariable int gameId) {
         //if (id != game.getId())
         //    return ResponseEntity.badRequest().build();
-        Game g = gameService.findById(id);
+        Game g = gameService.findById(gameId);
         g.setName(game.getName());
         g.setDescription(game.getDescription());
         g.setStartDateTime(game.getStartDateTime());
@@ -69,25 +70,25 @@ public class GameController {
     }
 
     @Operation(summary = "Deletes (cascading) a game. Admin only.")
-    @DeleteMapping("{id}") // DELETE: localhost:8080/api/v1/game/<game_id>
-    public ResponseEntity<?> delete(@PathVariable int id) {
-        gameService.deleteById(id);
+    @DeleteMapping("{gameId}") // DELETE: localhost:8080/api/v1/game/<game_id>
+    public ResponseEntity<?> delete(@PathVariable int gameId) {
+        gameService.deleteById(gameId);
         return ResponseEntity.noContent().build();
     }
 
 
     @Operation(summary = "Returns a list of faction-specific chat messages.")
-    @GetMapping("{id}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
-    public ResponseEntity<Set<ChatMessage>> getChatById(@PathVariable int id, @RequestHeader("player-id") int playerId) {
+    @GetMapping("{gameId}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
+    public ResponseEntity<List<ChatMessageGetDto>> getChatById(@PathVariable int gameId, @RequestHeader("player-id") int playerId) {
         Player player = playerService.findById(playerId);
-        Set<ChatMessage> chatMessages = chatMessageService.findAllGlobalAndPlayerFactionMessages(id, player);
+        List<ChatMessageGetDto> chatMessages = chatMessageMapper.toChatMessageDto(chatMessageService.findAllGlobalAndPlayerFactionMessages(gameId, player));
         return ResponseEntity.ok(chatMessages);
     }
 
     @Operation(summary = "Creates a new chat message.")
-    @PostMapping("{id}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
-    public ResponseEntity<?> add(@RequestBody ChatMessage chatMessage) {
-        chatMessageService.add(chatMessage);
+    @PostMapping("{gameId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
+    public ResponseEntity<?> add(@PathVariable int gameId, @RequestHeader("player-id") int playerId, @RequestBody ChatMessagePostDto chatMessage) {
+        chatMessageService.add(chatMessageMapper.toChatMessage(chatMessage, gameId, playerId));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

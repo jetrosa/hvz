@@ -1,15 +1,15 @@
-INSERT INTO app_user (first_name, last_name)
+INSERT INTO app_user (first_name, last_name, uuid)
 VALUES
-    ('Admin', 'Admin'),--1
-    ('Joe', 'Jackson'),--2
-    ('Alice', 'Smith'),--3
-    ('Max', 'Parker'),--4
-    ('Nada', 'No'),--5
-    ('Li', 'Won'),--6
-    ('Ali', 'Mohammed'),--7
-    ('Jesus', 'Gutierrez'),--8
-    ('Tom', 'Teamless'),--9
-    ('Lana', 'Loner');--10
+    ('Admin', 'Admin', 'fdh9'),--1
+    ('Joe', 'Jackson', 'fds9'),--2
+    ('Alice', 'Smith', 'fd29'),--3
+    ('Max', 'Parker', 'fd89'),--4
+    ('Nada', 'No', 'fd93'),--5
+    ('Li', 'Won', 'fd49'),--6
+    ('Ali', 'Mohammed', 'fs99'),--7
+    ('Jesus', 'Gutierrez', 'fh99'),--8
+    ('Tom', 'Teamless', 'fa99'),--9
+    ('Lana', 'Loner', 'fdf9');--10
 
 
 INSERT INTO game (game_name, description, game_state, start_date_time)
