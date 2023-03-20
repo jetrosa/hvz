@@ -5,6 +5,7 @@ import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.dtos.ChatMessageGetDto;
 import noroff.project.hvz.models.dtos.ChatMessagePostDto;
+import noroff.project.hvz.models.dtos.ChatMessageSquadPostDto;
 import noroff.project.hvz.services.GameService;
 import noroff.project.hvz.services.PlayerService;
 import org.mapstruct.Mapper;
@@ -28,6 +29,10 @@ public abstract class ChatMessageMapper {
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
     @Mapping(target = "player", source = "playerId", qualifiedByName = "playerIdToPlayer")
     public abstract ChatMessage toChatMessage(ChatMessagePostDto chatMessagePostDto,  int gameId, int playerId);
+
+    @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
+    @Mapping(target = "player", source = "playerId", qualifiedByName = "playerIdToPlayer")
+    public abstract ChatMessage toSquadChatMessage(ChatMessageSquadPostDto chatMessagePostDto, int gameId, int playerId);
 
     @Named("gameIdToGame")
     Game mapGameIdToGame(int gameId) {

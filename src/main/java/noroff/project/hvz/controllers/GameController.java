@@ -81,7 +81,7 @@ public class GameController {
     @GetMapping("{gameId}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<List<ChatMessageGetDto>> getChatById(@PathVariable int gameId, @RequestHeader("player-id") int playerId) {
         Player player = playerService.findById(playerId);
-        List<ChatMessageGetDto> chatMessages = chatMessageMapper.toChatMessageDto(chatMessageService.findAllGlobalAndPlayerFactionMessages(gameId, player));
+        List<ChatMessageGetDto> chatMessages = chatMessageService.findAllGlobalAndPlayerFactionMessages(gameId, player);
         return ResponseEntity.ok(chatMessages);
     }
 

@@ -9,5 +9,5 @@ public abstract class PlayerMapper {
     @Autowired
     protected PlayerService playerService;
 
-    //public abstract Player toPlayer(PlayerPostDto playerPostDto);
+    //public abstract Player toPlayer(PlayerAdminPostDto playerAdminPostDto);
 }

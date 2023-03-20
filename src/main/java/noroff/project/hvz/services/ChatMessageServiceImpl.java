@@ -4,20 +4,25 @@ import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.dtos.ChatMessageGetDto;
 import noroff.project.hvz.repositories.ChatMessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService{
     private final ChatMessageRepository chatMessageRepository;
     private final Logger logger = LoggerFactory.getLogger(ChatMessageServiceImpl.class);
-    public ChatMessageServiceImpl(ChatMessageRepository chatMessageRepository){
+    private final PlayerService playerService;
+    private final SquadService squadService;
+
+    public ChatMessageServiceImpl(ChatMessageRepository chatMessageRepository, PlayerService playerService, SquadService squadService){
         this.chatMessageRepository = chatMessageRepository;
+        this.playerService = playerService;
+        this.squadService = squadService;
     }
     @Override
     public ChatMessage findById(Integer id) {
@@ -37,6 +42,14 @@ public class ChatMessageServiceImpl implements ChatMessageService{
     @Override
     public ChatMessage add(ChatMessage entity) {
         return chatMessageRepository.save(entity);
+    }
+
+    @Override
+    public void addSquadChat(ChatMessage message, int squadId) {
+        if(squadService.existsById(squadId))
+        {
+            add(message);
+        }
     }
 
     @Override
@@ -60,15 +73,31 @@ public class ChatMessageServiceImpl implements ChatMessageService{
     }
 
     @Override
-    public Set<ChatMessage> findAllBySquadId(int squadId) {
-        return chatMessageRepository.findAllBySquadId(squadId);
+    public List<ChatMessageGetDto> findAllBySquadId(int squadId) {
+        Set<ChatMessage> messages = chatMessageRepository.findAllBySquadId(squadId);
+        return chatMessagesToDtos(messages);
     }
 
 
     @Transactional
     @Override
-    public Set<ChatMessage> findAllGlobalAndPlayerFactionMessages(int gameId, Player player) {
+    public List<ChatMessageGetDto> findAllGlobalAndPlayerFactionMessages(int gameId, Player player) {
         boolean isHumanGlobal = player.getIsHuman();
-        return chatMessageRepository.findAllByGameIdAndIsHumanGlobalAndSquadIsNullOrIsZombieGlobalAndSquadIsNull(gameId, isHumanGlobal, !isHumanGlobal);
+        Set<ChatMessage> messages = chatMessageRepository.findAllByGameIdAndIsHumanGlobalAndSquadIsNullOrIsZombieGlobalAndSquadIsNull(gameId, isHumanGlobal, !isHumanGlobal);
+        return chatMessagesToDtos(messages);
+    }
+
+    private List<ChatMessageGetDto> chatMessagesToDtos(Set<ChatMessage> messages){
+        List<ChatMessageGetDto> messageDtos = new ArrayList<>();
+        for(ChatMessage m: messages){
+            ChatMessageGetDto c = new ChatMessageGetDto();
+            c.setMessage(m.getMessage());
+            c.setChat_time(m.getChat_time());
+            c.setIsHumanGlobal(m.getIsHumanGlobal());
+            c.setIsZombieGlobal(m.getIsZombieGlobal());
+            c.setPlayer(playerService.findPlayerWithNameAndSquadByIdWithoutBiteCode(m.getPlayer()));
+            messageDtos.add(c);
+        }
+        return messageDtos;
     }
 }
