@@ -20,11 +20,11 @@ import java.util.Set;
 public class PlayerServiceImpl implements PlayerService{
     private final PlayerRepository playerRepository;
     private final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
-    private final SquadMemberRepository squadMemberRepository;
+    private final SquadMemberRepository squadMemberService;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, SquadMemberRepository squadMemberRepository){
+    public PlayerServiceImpl(PlayerRepository playerRepository, SquadMemberRepository squadMemberService){
         this.playerRepository=playerRepository;
-        this.squadMemberRepository = squadMemberRepository;
+        this.squadMemberService = squadMemberService;
     }
     @Override
     public Player findById(Integer id) {
@@ -82,7 +82,7 @@ public class PlayerServiceImpl implements PlayerService{
         Player  p = findById(playerId);
         AppUser a = p.getAppUser();
         String fullName = a.getFirstName()+" "+a.getLastName();
-        SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
+        SquadMember s = squadMemberService.findByPlayerId(p.getId());
         Integer squadId = null;
         if(s!=null) squadId = s.getSquad().getId();
 
@@ -93,7 +93,7 @@ public class PlayerServiceImpl implements PlayerService{
     public PlayerWithNameAndSquadWithoutBiteCodeDto findPlayerWithNameAndSquadByIdWithoutBiteCode(Player p) {
         AppUser a = p.getAppUser();
         String fullName = a.getFirstName()+" "+a.getLastName();
-        SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
+        SquadMember s = squadMemberService.findByPlayerId(p.getId());
         Integer squadId = null;
         if(s!=null) squadId = s.getSquad().getId();
 

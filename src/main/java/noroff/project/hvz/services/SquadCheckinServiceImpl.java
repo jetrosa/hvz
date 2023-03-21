@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Service
@@ -33,8 +34,11 @@ public class SquadCheckinServiceImpl implements SquadCheckinService{
     }
 
     @Override
-    public SquadCheckin add(SquadCheckin entity) {
-        return squadCheckinRepository.save(entity);
+    public SquadCheckin add(SquadCheckin squadCheckin) {
+        LocalDateTime now = LocalDateTime.now();
+        squadCheckin.setStartTime(now);
+        squadCheckin.setEndTime(now.plusMinutes(30));
+        return squadCheckinRepository.save(squadCheckin);
     }
 
     @Override

@@ -12,4 +12,6 @@ public interface SquadMemberService extends CrudService<SquadMember, Integer> {
 
     @Transactional
     void createAndJoin(Squad squad, int playerId);
+
+    SquadMember findByPlayerId(int playerId);
 }
