@@ -9,4 +9,5 @@ import java.util.Set;
 @Repository
 public interface BiteRepository extends JpaRepository<Bite, Integer> {
     Set<Bite> findAllByGameId(final int gameId);
+    boolean existsByVictimId(int victimId);
 }

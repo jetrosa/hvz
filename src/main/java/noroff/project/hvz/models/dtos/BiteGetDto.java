@@ -10,6 +10,6 @@ public class BiteGetDto {
     private String story;
     private Double latitude;
     private Double longitude;
-    private int biterId;
-    private int victimId;
+    private Integer biterId;
+    private Integer victimId;
 }

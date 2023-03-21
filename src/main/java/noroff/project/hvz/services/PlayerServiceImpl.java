@@ -100,6 +100,16 @@ public class PlayerServiceImpl implements PlayerService{
         return new PlayerWithNameAndSquadWithoutBiteCodeDto(p.getIsHuman(),fullName,squadId);
     }
 
+    @Override
+    public Player findPlayerByBiteCode(String biteCode) {
+        Player player =  playerRepository.findPlayerByBiteCode(biteCode);
+        if(player!=null)
+            return player;
+        else
+            throw new RecordNotFoundException("player", biteCode);
+
+    }
+
     private String generateBiteCode(){
         return "";
     }
