@@ -1,5 +1,6 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.DuplicateKeyException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Bite;
 import noroff.project.hvz.repositories.BiteRepository;
@@ -33,8 +34,12 @@ public class BiteServiceImpl implements BiteService {
     }
 
     @Override
-    public Bite add(Bite entity) {
-        return biteRepository.save(entity);
+    public Bite add(Bite bite) {
+        boolean isVictimAlreadyBitten = biteRepository.existsByVictimId(bite.getVictim().getId());
+        if(!isVictimAlreadyBitten)
+            return biteRepository.save(bite);
+        else
+            throw new DuplicateKeyException("victim");
     }
 
     @Override

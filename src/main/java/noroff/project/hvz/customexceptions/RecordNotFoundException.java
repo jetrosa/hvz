@@ -8,4 +8,7 @@ public class RecordNotFoundException extends RuntimeException{
     public RecordNotFoundException(String name, long id){
         super(name + " does not exist with ID: " + id);
     }
+    public RecordNotFoundException(String name, String id){
+        super(name + " does not exist with ID: " + id);
+    }
 }
