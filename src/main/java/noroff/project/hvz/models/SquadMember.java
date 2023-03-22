@@ -22,7 +22,7 @@ public class SquadMember {
     @ManyToOne
     private Squad squad;
     @NotNull(message = "Player may not be null")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="player_id", unique=true)
     private Player player;

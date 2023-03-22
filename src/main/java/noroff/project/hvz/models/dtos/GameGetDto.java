@@ -16,4 +16,5 @@ public class GameGetDto {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private List<MapCoordinate> mapCoordinates;
+    private int playerCount;
 }
