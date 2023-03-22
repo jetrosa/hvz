@@ -2,6 +2,7 @@ package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.dtos.PlayerUpdateDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.services.PlayerService;
 import org.springframework.http.HttpStatus;
@@ -44,10 +45,8 @@ public class GamePlayerController {
 
     @Operation(summary = "Updates a player. Admin only.")
     @PutMapping("{playerId}") // PUT: localhost:8080/api/v1/game/{gameId}/player/{playerId}
-    public ResponseEntity<?> update(@RequestBody Player player, @PathVariable int playerId) {
-        if (playerId != player.getId())
-            return ResponseEntity.badRequest().build();
-        playerService.update(player);
+    public ResponseEntity<?> update(@RequestBody PlayerUpdateDto player, @PathVariable int playerId) {
+        playerService.updateWithDto(player, playerId);
         return ResponseEntity.noContent().build();
     }
 

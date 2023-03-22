@@ -1,6 +1,7 @@
 package noroff.project.hvz.services;
 
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.dtos.PlayerUpdateDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadWithoutBiteCodeDto;
 
@@ -12,4 +13,5 @@ public interface PlayerService extends CrudService<Player, Integer> {
     PlayerWithNameAndSquadDto findPlayerWithNameAndSquadById(int playerId);
     PlayerWithNameAndSquadWithoutBiteCodeDto findPlayerWithNameAndSquadByIdWithoutBiteCode(Player player);
     Player findPlayerByBiteCode(String biteCode);
+    void updateWithDto(PlayerUpdateDto player, int playerId);
 }

@@ -20,7 +20,9 @@ public class Player {
     private int id;
     @NotNull(message = "Player type may not be null (false: zombie)")
     private Boolean isHuman;
+    @JsonIgnore
     private Boolean isPatientZero = false;
+    @JsonIgnore
     @NotNull(message = "Personal bite code may not be null")
     @Column(unique=true)
     private String biteCode;

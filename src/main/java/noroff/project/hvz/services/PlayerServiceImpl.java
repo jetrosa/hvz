@@ -6,6 +6,7 @@ import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.SquadMember;
+import noroff.project.hvz.models.dtos.PlayerUpdateDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadWithoutBiteCodeDto;
 import noroff.project.hvz.repositories.PlayerRepository;
@@ -78,6 +79,13 @@ public class PlayerServiceImpl implements PlayerService{
     @Override
     public Player update(Player entity) {
         return playerRepository.save(entity);
+    }
+
+    @Override
+    public void updateWithDto(PlayerUpdateDto dto, int playerId) {
+        Player player = findById(playerId);
+        player.setIsHuman(dto.getIsHuman());
+        update(player);
     }
 
     @Override
