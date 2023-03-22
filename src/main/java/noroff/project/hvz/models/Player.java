@@ -18,13 +18,11 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull(message = "Player type may not be null (false: zombie)")
-    @Column(name = "is_human")
     private Boolean isHuman;
     @NotNull(message = "Player zero status may not be null")
-    @Column(name = "is_patient_zero")
     private Boolean isPatientZero;
     @NotNull(message = "Personal bite code may not be null")
-    @Column(name = "bite_code", unique=true)
+    @Column(unique=true)
     private String biteCode;
     @NotNull(message = "User may not be null")
     @ManyToOne
@@ -39,8 +37,4 @@ public class Player {
     @OneToMany(mappedBy = "player", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ChatMessage> chatMessages;
-
-   // @JsonIgnore
-    //@OneToOne(mappedBy = "player")
-   // SquadMember squadMember;
 }

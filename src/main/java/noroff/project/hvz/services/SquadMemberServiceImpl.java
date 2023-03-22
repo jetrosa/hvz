@@ -116,4 +116,9 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         joinSquad(createdSquad.getId(), playerId);
     }
 
+    @Override
+    public SquadMember findByPlayerId(int playerId) {
+        return squadMemberRepository.findByPlayerId(playerId);
+    }
+
 }
