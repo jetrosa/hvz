@@ -51,10 +51,9 @@ public class Game {
     @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Bite> bites;
-    @JsonIgnore
     @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Player> players;
+    private List<Player> players;
     @JsonIgnore
     @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
