@@ -5,11 +5,9 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class BiteGetDto {
-    private LocalDateTime timeOfDeath;
-    private String story;
+public class SquadCheckinGetDto {
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Double latitude;
     private Double longitude;
-    private Integer biterId;
-    private Integer victimId;
 }

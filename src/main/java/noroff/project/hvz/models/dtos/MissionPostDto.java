@@ -1,6 +1,5 @@
 package noroff.project.hvz.models.dtos;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -20,10 +19,8 @@ public class MissionPostDto {
     private Boolean isZombieVisible;
     @Size(min = 2, max = 200, message = "Description must be between 2 and 200 characters long")
     private String description;
-    @Column(name = "start_date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startTime;
-    @Column(name = "end_date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endTime;
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")

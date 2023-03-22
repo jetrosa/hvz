@@ -84,15 +84,10 @@ VALUES
     (0,11,5);
 
 
-INSERT INTO squad_checkin (start_date_time, end_date_time, latitude, longitude, game_id, squad_id)
+INSERT INTO squad_checkin (start_date_time, end_date_time, latitude, longitude, game_id, squad_id, squad_member_id)
 VALUES
-    (timestamp '2023-03-15 00:00:00', timestamp '2023-03-15 00:30:00', 24.9731040, 60.1838565, 1, 1),
-    (timestamp '2023-03-15 00:00:00', timestamp '2023-03-15 00:30:00', 24.9704862, 60.1822561, 1, 2),
-    (timestamp '2023-03-15 00:00:00', timestamp '2023-03-15 00:30:00', 24.9694562, 60.1828003, 1, 3),
-    (timestamp '2023-03-15 00:00:00',timestamp '2023-03-15 00:30:00', 24.9684906, 60.1817013, 1, 4),
-
-    (timestamp '2023-03-15 00:00:00',timestamp '2023-03-15 00:30:00', 24.9479127, 60.1749786, 2, 5);
-
+    (timestamp '2023-03-15 00:00:00', timestamp '2023-04-15 00:30:00', 24.9731040, 60.1838565, 1, 1, 1),
+    (timestamp '2023-03-15 00:00:00', timestamp '2023-04-15 00:30:00', 24.9704862, 60.1822561, 1, 2, 3);
 
 
 INSERT INTO mission (mission_name, description, start_date_time, end_date_time, is_human_visible, is_zombie_visible, latitude, longitude, game_id)

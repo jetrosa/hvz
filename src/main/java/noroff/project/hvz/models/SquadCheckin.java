@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,10 +29,10 @@ public class SquadCheckin {
     private LocalDateTime endTime;
     @NotNull(message = "Latitude may not be null")
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
-    private double latitude;
+    private Double latitude;
     @NotNull(message = "Longitude may not be null")
     @Range(min = -180, max = 180, message = "Valid longitude is between -180 and 180")
-    private double longitude;
+    private Double longitude;
     @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne
@@ -39,4 +41,10 @@ public class SquadCheckin {
     @NotNull(message = "Squad may not be null")
     @ManyToOne
     private Squad squad;
+    @JsonIgnore
+    @JoinColumn(unique = true)
+    @NotNull(message = "Squad member may not be null")
+    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private SquadMember squadMember;
 }

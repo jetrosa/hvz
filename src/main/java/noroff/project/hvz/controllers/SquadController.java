@@ -2,13 +2,9 @@ package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.mappers.ChatMessageMapper;
+import noroff.project.hvz.mappers.SquadCheckinMapper;
 import noroff.project.hvz.mappers.SquadMapper;
-import noroff.project.hvz.models.Squad;
-import noroff.project.hvz.models.SquadCheckin;
-import noroff.project.hvz.models.dtos.ChatMessageGetDto;
-import noroff.project.hvz.models.dtos.ChatMessageSquadPostDto;
-import noroff.project.hvz.models.dtos.SquadGetDto;
-import noroff.project.hvz.models.dtos.SquadPostDto;
+import noroff.project.hvz.models.dtos.*;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.SquadCheckinService;
 import noroff.project.hvz.services.SquadMemberService;
@@ -30,20 +26,22 @@ public class SquadController {
     private final SquadCheckinService squadCheckinService;
     private final SquadMapper squadMapper;
     private final ChatMessageMapper chatMessageMapper;
+    private final SquadCheckinMapper squadCheckinMapper;
 
-    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService, SquadMapper squadMapper, ChatMessageMapper chatMessageMapper) {
+    public SquadController(SquadService squadService, SquadMemberService squadMemberService, SquadCheckinService squadCheckinService, ChatMessageService chatMessageService, SquadMapper squadMapper, SquadCheckinMapper squadCheckinMapper, ChatMessageMapper chatMessageMapper) {
         this.squadService = squadService;
         this.squadMemberService = squadMemberService;
         this.squadCheckinService = squadCheckinService;
         this.chatMessageService = chatMessageService;
         this.squadMapper = squadMapper;
+        this.squadCheckinMapper = squadCheckinMapper;
         this.chatMessageMapper = chatMessageMapper;
     }
 
     @Operation(summary = "Returns a list of squads.")
     @GetMapping // GET: localhost:8080/api/v1/game/{gameId}/squad
-    public ResponseEntity<Collection<Squad>> getAll(@PathVariable int gameId) {
-        Collection<Squad> squads = squadService.findAllByGameId(gameId);
+    public ResponseEntity<Collection<SquadGetDto>> getAll(@PathVariable int gameId) {
+        Collection<SquadGetDto> squads = squadMapper.toSquadDto(squadService.findAllByGameId(gameId));
         return ResponseEntity.ok(squads);
     }
 
@@ -56,14 +54,14 @@ public class SquadController {
 
     @Operation(summary = "Creates a squad member object (join a squad).")
     @PostMapping("{squadId}/join")// POST: localhost:8080/api/v1/game/{gameId}/squad/<squadId>/join
-    public ResponseEntity<?> join(@PathVariable int gameId, @PathVariable int squadId, @RequestHeader("player-id") int playerId) {
+    public ResponseEntity<?> join(@PathVariable int squadId, @RequestHeader("player-id") int playerId) {
         squadMemberService.joinSquad(squadId, playerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Deletes a squad member object (leave a squad).")
     @DeleteMapping("leave")// DELETE: localhost:8080/api/v1/game/{gameId}/squad/leave
-    public ResponseEntity<?> leave(@PathVariable int gameId, @RequestHeader("player-id") int playerId) {
+    public ResponseEntity<?> leave(@RequestHeader("player-id") int playerId) {
         squadMemberService.leaveSquad(playerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -104,16 +102,16 @@ public class SquadController {
     }
 
     @Operation(summary = "Get a list of squad check-in markers.")
-    @GetMapping("{id}/check-in") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
-    public ResponseEntity<List<SquadCheckin>> getCheckinById(@PathVariable int id) {
-        List<SquadCheckin> squadCheckins = squadService.findById(id).getSquadCheckins();
+    @GetMapping("{squadId}/check-in") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
+    public ResponseEntity<List<SquadCheckinGetDto>> getCheckinBySquadId(@PathVariable int squadId) {
+        List<SquadCheckinGetDto> squadCheckins = squadCheckinMapper.toSquadCheckinDto(squadService.findById(squadId).getSquadCheckins());
         return ResponseEntity.ok(squadCheckins);
     }
 
     @Operation(summary = "Create a squad checkin.")
-    @PostMapping("{id}/check-in") // POST: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
-    public ResponseEntity<?> addCheckin(@RequestBody SquadCheckin squadCheckin) {
-        squadCheckinService.add(squadCheckin);
+    @PostMapping("{squadId}/check-in") // POST: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
+    public ResponseEntity<?> addSquadCheckin(@PathVariable int gameId, @PathVariable int squadId, @RequestHeader("player-id") int playerId, @RequestBody SquadCheckinPostDto squadCheckin) {
+        squadCheckinService.add(squadCheckinMapper.toSquadCheckin(squadCheckin,gameId, squadId, playerId)) ;
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
