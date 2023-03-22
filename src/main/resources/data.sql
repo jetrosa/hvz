@@ -9,7 +9,8 @@ VALUES
     ('Ali', 'Mohammed', 'fs99'),--7
     ('Jesus', 'Gutierrez', 'fh99'),--8
     ('Tom', 'Teamless', 'fa99'),--9
-    ('Lana', 'Loner', 'fdf9');--10
+    ('Lana', 'Loner', 'fdf9'),--10
+    ('Lobby', 'Lob', 'ffff');--11
 
 
 INSERT INTO game (game_name, description, game_state, start_date_time)

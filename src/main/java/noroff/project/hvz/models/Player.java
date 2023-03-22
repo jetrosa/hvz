@@ -13,14 +13,16 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "app_user_id", "game_id" }) })
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull(message = "Player type may not be null (false: zombie)")
     private Boolean isHuman;
-    @NotNull(message = "Player zero status may not be null")
-    private Boolean isPatientZero;
+    @JsonIgnore
+    private Boolean isPatientZero = false;
+    @JsonIgnore
     @NotNull(message = "Personal bite code may not be null")
     @Column(unique=true)
     private String biteCode;

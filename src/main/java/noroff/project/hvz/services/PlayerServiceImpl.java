@@ -1,14 +1,17 @@
 package noroff.project.hvz.services;
 
+import noroff.project.hvz.customexceptions.DuplicateKeyException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.SquadMember;
+import noroff.project.hvz.models.dtos.PlayerUpdateDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadWithoutBiteCodeDto;
 import noroff.project.hvz.repositories.PlayerRepository;
 import noroff.project.hvz.repositories.SquadMemberRepository;
+import noroff.project.hvz.utils.RandomIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,11 +23,15 @@ import java.util.Set;
 public class PlayerServiceImpl implements PlayerService{
     private final PlayerRepository playerRepository;
     private final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
-    private final SquadMemberRepository squadMemberService;
+    private final SquadMemberRepository squadMemberRepository;
+    private final GameService gameService;
+    private final AppUserService appUserService;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, SquadMemberRepository squadMemberService){
+    public PlayerServiceImpl(PlayerRepository playerRepository, SquadMemberRepository squadMemberRepository, GameService gameService, AppUserService appUserService){
         this.playerRepository=playerRepository;
-        this.squadMemberService = squadMemberService;
+        this.squadMemberRepository = squadMemberRepository;
+        this.gameService = gameService;
+        this.appUserService = appUserService;
     }
     @Override
     public Player findById(Integer id) {
@@ -47,10 +54,22 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     @Override
-    public Player addWithDefaultValues(AppUser a, Game g) {
+    public Player addWithDefaultValues(String userUuid, int gameId) {
+        Game game = gameService.findById(gameId);
+        if(game==null)
+            throw new RecordNotFoundException("game", gameId);
+        AppUser user = appUserService.findByUuid(userUuid);
+
+        if(playerRepository.existsByGameAndAppUser(game, user))
+            throw new DuplicateKeyException("game, user");
+
+        String biteCode = generateBiteCode();
+        if(biteCode==null)
+            throw new DuplicateKeyException("generated bitecode");
+
         Player player = new Player();
-        player.setAppUser(a);
-        player.setGame(g);
+        player.setAppUser(user);
+        player.setGame(game);
         player.setIsHuman(true);
         player.setBiteCode(generateBiteCode());
 
@@ -60,6 +79,13 @@ public class PlayerServiceImpl implements PlayerService{
     @Override
     public Player update(Player entity) {
         return playerRepository.save(entity);
+    }
+
+    @Override
+    public void updateWithDto(PlayerUpdateDto dto, int playerId) {
+        Player player = findById(playerId);
+        player.setIsHuman(dto.getIsHuman());
+        update(player);
     }
 
     @Override
@@ -82,7 +108,7 @@ public class PlayerServiceImpl implements PlayerService{
         Player  p = findById(playerId);
         AppUser a = p.getAppUser();
         String fullName = a.getFirstName()+" "+a.getLastName();
-        SquadMember s = squadMemberService.findByPlayerId(p.getId());
+        SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
         Integer squadId = null;
         if(s!=null) squadId = s.getSquad().getId();
 
@@ -93,7 +119,7 @@ public class PlayerServiceImpl implements PlayerService{
     public PlayerWithNameAndSquadWithoutBiteCodeDto findPlayerWithNameAndSquadByIdWithoutBiteCode(Player p) {
         AppUser a = p.getAppUser();
         String fullName = a.getFirstName()+" "+a.getLastName();
-        SquadMember s = squadMemberService.findByPlayerId(p.getId());
+        SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
         Integer squadId = null;
         if(s!=null) squadId = s.getSquad().getId();
 
@@ -111,6 +137,14 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     private String generateBiteCode(){
-        return "";
+
+        for(int i = 0; i<10;i++){
+            String biteCode = RandomIdGenerator.GetBase36(4);
+            if(!playerRepository.existsByBiteCode(biteCode)){
+                return biteCode;
+            }
+
+        }
+        return null;
     }
 }
