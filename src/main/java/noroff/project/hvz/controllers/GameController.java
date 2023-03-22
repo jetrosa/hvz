@@ -58,8 +58,6 @@ public class GameController {
     @Operation(summary = "Updates a game. Admin only.")
     @PutMapping("{gameId}") // PUT: localhost:8080/api/v1/game/<game_id>
     public ResponseEntity<?> update(@RequestBody GamePostDto game, @PathVariable int gameId) {
-        //if (id != game.getId())
-        //    return ResponseEntity.badRequest().build();
         Game g = gameService.findById(gameId);
         g.setName(game.getName());
         g.setDescription(game.getDescription());

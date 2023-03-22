@@ -37,8 +37,8 @@ public class GamePlayerController {
 
     @Operation(summary = "Creates a new player.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/player/
-    public ResponseEntity<?> add(@RequestBody Player player) {
-        playerService.add(player);
+    public ResponseEntity<?> add(@PathVariable int gameId, @RequestHeader("keycloak_player_uuid") String userUuid) {
+        playerService.addWithDefaultValues(userUuid,gameId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

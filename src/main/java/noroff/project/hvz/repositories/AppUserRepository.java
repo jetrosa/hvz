@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     boolean existsByUuid(final String uuid);
+    AppUser findByUuid(final String uuid);
 }

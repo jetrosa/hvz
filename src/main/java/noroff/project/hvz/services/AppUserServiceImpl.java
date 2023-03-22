@@ -51,11 +51,18 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public void delete(AppUser appUser) {
         appUserRepository.delete(appUser);
-        //todo player
     }
 
     @Override
     public boolean existsByUuid(String uuid) {
         return appUserRepository.existsByUuid(uuid);
+    }
+
+    @Override
+    public AppUser findByUuid(String uuid) {
+        AppUser user = appUserRepository.findByUuid(uuid);
+        if(user==null)
+            throw new RecordNotFoundException("appUser", uuid);
+        return appUserRepository.findByUuid(uuid);
     }
 }
