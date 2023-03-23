@@ -9,4 +9,5 @@ import java.util.Set;
 @Repository
 public interface SquadCheckinRepository extends JpaRepository<SquadCheckin, Integer> {
     Set<SquadCheckin> findAllByGameId(final int gameId);
+    SquadCheckin getBySquadMemberId(int id);
 }

@@ -111,7 +111,7 @@ public class SquadController {
     @Operation(summary = "Create a squad checkin.")
     @PostMapping("{squadId}/check-in") // POST: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
     public ResponseEntity<?> addSquadCheckin(@PathVariable int gameId, @PathVariable int squadId, @RequestHeader("player-id") int playerId, @RequestBody SquadCheckinPostDto squadCheckin) {
-        squadCheckinService.add(squadCheckinMapper.toSquadCheckin(squadCheckin,gameId, squadId, playerId)) ;
+        squadCheckinService.addOrUpdate(squadCheckinMapper.toSquadCheckin(squadCheckin,gameId, squadId, playerId)) ;
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

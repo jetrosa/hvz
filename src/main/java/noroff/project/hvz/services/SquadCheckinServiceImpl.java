@@ -35,9 +35,16 @@ public class SquadCheckinServiceImpl implements SquadCheckinService{
 
     @Override
     public SquadCheckin add(SquadCheckin squadCheckin) {
+        return squadCheckinRepository.save(squadCheckin);
+    }
+
+    public SquadCheckin addOrUpdate(SquadCheckin squadCheckin) {
         LocalDateTime now = LocalDateTime.now();
         squadCheckin.setStartTime(now);
         squadCheckin.setEndTime(now.plusMinutes(30));
+        SquadCheckin old = squadCheckinRepository.getBySquadMemberId(squadCheckin.getSquadMember().getId());
+        if(old!=null)
+            squadCheckin.setId(old.getId());
         return squadCheckinRepository.save(squadCheckin);
     }
 
@@ -54,6 +61,5 @@ public class SquadCheckinServiceImpl implements SquadCheckinService{
     @Override
     public void delete(SquadCheckin squadCheckin) {
         squadCheckinRepository.delete(squadCheckin);
-        //todo chatmessage
     }
 }
