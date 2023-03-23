@@ -1,8 +1,11 @@
 package noroff.project.hvz.services;
 
+import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.DuplicateKeyException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Bite;
+import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.SquadMember;
 import noroff.project.hvz.repositories.BiteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +18,13 @@ import java.util.Set;
 public class BiteServiceImpl implements BiteService {
     private final BiteRepository biteRepository;
     private final Logger logger = LoggerFactory.getLogger(BiteServiceImpl.class);
-    public BiteServiceImpl(BiteRepository biteRepository){
+    private final SquadMemberService squadMemberService;
+    private final PlayerService playerService;
+
+    public BiteServiceImpl(BiteRepository biteRepository, SquadMemberService squadMemberService, PlayerService playerService){
         this.biteRepository = biteRepository;
+        this.squadMemberService = squadMemberService;
+        this.playerService = playerService;
     }
     @Override
     public Bite findById(Integer id) {
@@ -33,11 +41,19 @@ public class BiteServiceImpl implements BiteService {
         return biteRepository.findAll();
     }
 
+    @Transactional
     @Override
     public Bite add(Bite bite) {
         boolean isVictimAlreadyBitten = biteRepository.existsByVictimId(bite.getVictim().getId());
-        if(!isVictimAlreadyBitten)
+        if(!isVictimAlreadyBitten){
+            Player player = bite.getVictim();
+            SquadMember s = squadMemberService.findByPlayerId(player.getId());
+            if(s!=null)
+                squadMemberService.delete(s);
+            bite.getVictim().setIsHuman(false);
+            playerService.update(player);
             return biteRepository.save(bite);
+        }
         else
             throw new DuplicateKeyException("victim");
     }
