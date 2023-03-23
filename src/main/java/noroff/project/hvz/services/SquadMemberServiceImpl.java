@@ -95,6 +95,7 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         add(s);
     }
 
+    @Transactional
     @Override
     public void leaveSquad(int playerId) {
         SquadMember s = squadMemberRepository.findByPlayerId(playerId);
