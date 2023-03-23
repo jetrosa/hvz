@@ -3,27 +3,30 @@ package noroff.project.hvz.services;
 import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Game;
+import noroff.project.hvz.models.GameState;
 import noroff.project.hvz.models.MapCoordinate;
+import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.dtos.MapCoordinateDto;
 import noroff.project.hvz.repositories.GameRepository;
 import noroff.project.hvz.repositories.MapCoordinateRepository;
+import noroff.project.hvz.repositories.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GameServiceImpl implements GameService{
     private final GameRepository gameRepository;
+    private final PlayerRepository playerRepository;
     private final MapCoordinateRepository mapCoordinateRepository;
 
     private final Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
-    public GameServiceImpl(GameRepository gameRepository, MapCoordinateRepository mapCoordinateRepository){
+    public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository, MapCoordinateRepository mapCoordinateRepository){
         this.gameRepository=gameRepository;
         this.mapCoordinateRepository=mapCoordinateRepository;
+        this.playerRepository = playerRepository;
     }
     @Override
     public Game findById(Integer id) {
@@ -73,5 +76,32 @@ public class GameServiceImpl implements GameService{
             mapCoordinates.add(m);
         }
         mapCoordinateRepository.saveAll(mapCoordinates);
+    }
+    @Transactional
+    @Override
+    public void setGameInfection(Game game) {
+       List<Player> players = playerRepository.findAllByGameId(game.getId());
+       if(players.size()>0) {
+           Random rnd = new Random();
+           int infectedPlayerNum = rnd.nextInt(players.size());
+           players.get(infectedPlayerNum).setIsPatientZero(true);
+       }
+       game.setGameState(GameState.INFECTION);
+    }
+
+    @Transactional
+    @Override
+    public void setGameStart(Game game) {
+        List<Player> players = playerRepository.findAllByGameId(game.getId());
+        for(Player p: players){
+            if(p.getIsPatientZero())
+                p.setIsHuman(false);
+        }
+        game.setGameState(GameState.IN_PROGRESS);
+    }
+
+    @Override
+    public void setGameComplete(Game game) {
+        game.setGameState(GameState.COMPLETE);
     }
 }
