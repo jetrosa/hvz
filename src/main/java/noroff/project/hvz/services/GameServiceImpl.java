@@ -92,10 +92,9 @@ public class GameServiceImpl implements GameService{
     @Transactional
     @Override
     public void setGameStart(Game game) {
-        List<Player> players = playerRepository.findAllByGameId(game.getId());
+        List<Player> players = playerRepository.findAllByGameIdAndIsPatientZeroIsTrue(game.getId());
         for(Player p: players){
-            if(p.getIsPatientZero())
-                p.setIsHuman(false);
+            p.setIsHuman(false);
         }
         game.setGameState(GameState.IN_PROGRESS);
     }
