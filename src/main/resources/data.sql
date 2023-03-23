@@ -13,10 +13,10 @@ VALUES
     ('Lobby', 'Lob', 'ffff');--11
 
 
-INSERT INTO game (game_name, description, game_state, start_date_time)
+INSERT INTO game (game_name, description, game_state, start_date_time, end_date_time)
 VALUES
-    ('Test game 1', 'Let''s go!', 'REGISTRATION', timestamp '2023-03-10 00:51:14'),
-    ('Test game 2', 'Zombie fest', 'REGISTRATION', timestamp '2023-04-11 00:51:14');
+    ('Test game 1', 'Let''s go!', 'REGISTRATION', timestamp '2023-03-10 00:51:14', timestamp '2023-04-10 00:51:14'),
+    ('Test game 2', 'Zombie fest', 'REGISTRATION', timestamp '2023-04-11 00:51:14', timestamp '2023-04-10 00:51:14');
 
 INSERT INTO map_coordinate (latitude, longitude, game_id)
 VALUES

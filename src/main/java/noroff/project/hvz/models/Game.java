@@ -35,6 +35,7 @@ public class Game {
     @Column(name = "start_date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startDateTime;
+    @NotNull(message = "End time  may not be null")
     @Column(name = "end_date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endDateTime;
