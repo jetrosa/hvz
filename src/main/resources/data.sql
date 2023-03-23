@@ -18,7 +18,7 @@ VALUES
     ('Test game 1', 'Let''s go!', 'REGISTRATION', timestamp '2023-03-10 00:51:14', timestamp '2023-04-10 00:51:14'),
     ('Test game 2', 'Zombie fest', 'REGISTRATION', timestamp '2023-04-11 00:51:14', timestamp '2023-04-10 00:51:14');
 
-INSERT INTO map_coordinate (latitude, longitude, game_id)
+INSERT INTO map_coordinate (longitude, latitude, game_id)
 VALUES
     (24.9706578, 60.1848488,1),
     (24.9660230, 60.1825442,1),
@@ -52,7 +52,7 @@ VALUES
     (false, false, 'hw5b', 2,2);
 
 
-INSERT INTO bite (latitude, longitude, time_of_death, game_id, biter_id, victim_id)
+INSERT INTO bite (longitude, latitude, time_of_death, game_id, biter_id, victim_id)
 VALUES
     (24.9671173, 60.1819467, timestamp '2023-03-11 00:52:14',1,1,5),
     (24.9683189, 60.1814986, timestamp '2023-03-12 00:57:14',1,1,6),
@@ -85,13 +85,13 @@ VALUES
     (0,11,5);
 
 
-INSERT INTO squad_checkin (start_date_time, end_date_time, latitude, longitude, game_id, squad_id, squad_member_id)
+INSERT INTO squad_checkin (start_date_time, end_date_time, longitude, latitude, game_id, squad_id, squad_member_id)
 VALUES
     (timestamp '2023-03-15 00:00:00', timestamp '2023-04-15 00:30:00', 24.9731040, 60.1838565, 1, 1, 1),
     (timestamp '2023-03-15 00:00:00', timestamp '2023-04-15 00:30:00', 24.9704862, 60.1822561, 1, 2, 3);
 
 
-INSERT INTO mission (mission_name, description, start_date_time, end_date_time, is_human_visible, is_zombie_visible, latitude, longitude, game_id)
+INSERT INTO mission (mission_name, description, start_date_time, end_date_time, is_human_visible, is_zombie_visible, longitude, latitude, game_id)
 VALUES
     ('human mission 1', 'food',timestamp '2023-03-15 01:00:00',timestamp '2023-03-15 02:00:00',true,false, 24.9670315, 60.1821494, 1),
     ('human mission 2', 'weapons',timestamp '2023-03-15 01:01:00',timestamp '2023-03-15 02:01:00',true,false, 24.9689198, 60.1830457, 1),
