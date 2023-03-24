@@ -31,9 +31,13 @@ public abstract class ChatMessageMapper {
     public abstract ChatMessage toChatMessage(ChatMessagePostDto chatMessagePostDto,  int gameId, int playerId);
 
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
+    @Mapping(target = "player", source = "player")
+    @Mapping(target = "id", ignore = true)
     public abstract ChatMessage toChatMessage(ChatMessagePostDto chatMessagePostDto,  int gameId, Player player);
 
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
+    @Mapping(target = "player", source = "player")
+    @Mapping(target = "id", ignore = true)
     public abstract ChatMessage toSquadChatMessage(ChatMessageSquadPostDto chatMessagePostDto, int gameId, Player player);
 
     @Named("gameIdToGame")
