@@ -10,6 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     boolean existsByUuid(final String uuid);
-    Optional<AppUser> findAppUserByUuid(String uid);
-    AppUser findByUuid(final String uuid);
+    Optional<AppUser> findByUuid(final String uuid);
 }
