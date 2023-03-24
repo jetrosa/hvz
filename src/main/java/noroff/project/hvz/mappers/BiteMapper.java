@@ -37,6 +37,10 @@ public abstract class BiteMapper {
     public abstract Bite toBitePost(BitePostDto bitePostDto, int gameId, int biterId);
 
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
+    @Mapping(target = "victim", source = "bitePostDto.biteCode", qualifiedByName = "biteCodeToPlayer")
+    public abstract Bite toBitePost(BitePostDto bitePostDto, int gameId, Player biter);
+
+    @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
     @Mapping(target = "victim", source = "biteUpdateDto.victimId", qualifiedByName = "playerIdToPlayer")
     @Mapping(target = "biter", source = "biteUpdateDto.biterId", qualifiedByName = "playerIdToPlayer")
     public abstract Bite toBiteUpdate(BiteUpdateDto biteUpdateDto, int gameId, int biteId);

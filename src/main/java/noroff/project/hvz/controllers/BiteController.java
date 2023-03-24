@@ -2,14 +2,19 @@ package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.mappers.BiteMapper;
+import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.dtos.BiteGetDto;
 import noroff.project.hvz.models.dtos.BitePostDto;
 import noroff.project.hvz.models.dtos.BiteUpdateDto;
 import noroff.project.hvz.services.BiteService;
+import noroff.project.hvz.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin(maxAge = 3600)
@@ -18,10 +23,12 @@ import java.util.List;
 public class BiteController {
     private final BiteService biteService;
     private final BiteMapper biteMapper;
+    private final PlayerService playerService;
 
-    public BiteController(BiteService biteService, BiteMapper biteMapper){
+    public BiteController(BiteService biteService, BiteMapper biteMapper, PlayerService playerService){
         this.biteService=biteService;
         this.biteMapper = biteMapper;
+        this.playerService = playerService;
     }
 
     @Operation(summary = "Returns a list of bites.")
@@ -40,8 +47,11 @@ public class BiteController {
 
     @Operation(summary = "Creates a bite object by looking up the victim by the specified bite code.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/bite/
-    public ResponseEntity<?> add(@PathVariable int gameId, @RequestBody BitePostDto bite, @RequestHeader("player-id") int biterId) {
-        biteService.add(biteMapper.toBitePost(bite, gameId, biterId));
+    public ResponseEntity<?> add(@PathVariable int gameId, @RequestBody BitePostDto bite, @AuthenticationPrincipal Jwt jwt, Principal pr) {
+        System.out.println(pr.getName());
+        System.out.println(jwt.getClaimAsString("sub"));
+        Player biter = playerService.findByGameIdAndAppUserUuid(gameId,jwt.getClaimAsString("sub"));
+        biteService.add(biteMapper.toBitePost(bite, gameId, biter));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

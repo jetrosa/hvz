@@ -1,6 +1,7 @@
 package noroff.project.hvz.services;
 
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
+import noroff.project.hvz.customexceptions.UserNotFoundException;
 import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.repositories.AppUserRepository;
 import org.slf4j.Logger;
@@ -60,9 +61,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUser findByUuid(String uuid) {
-        AppUser user = appUserRepository.findByUuid(uuid);
-        if(user==null)
-            throw new RecordNotFoundException("appUser", uuid);
-        return appUserRepository.findByUuid(uuid);
+        return appUserRepository.findByUuid(uuid)
+                .orElseThrow(() -> new UserNotFoundException());
     }
 }
