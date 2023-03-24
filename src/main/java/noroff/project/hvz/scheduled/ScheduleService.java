@@ -15,7 +15,7 @@ public class ScheduleService {
     public ScheduleService(GameService gameService){
         this.gameService = gameService;
     }
-    @Scheduled(fixedRate =10000)
+    @Scheduled(fixedRate = 30000)
     public void gameStateService () {
         int infectionMinutes = 15;
 
