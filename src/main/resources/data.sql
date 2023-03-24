@@ -1,6 +1,6 @@
 INSERT INTO app_user (first_name, last_name, uuid)
 VALUES
-    ('Admin', 'Admin', 'fdh9'),--1
+    ('Admin', 'Admin', '0d3968ed-4e7b-420d-a638-a5915ae9821c'),--1
     ('Joe', 'Jackson', 'fds9'),--2
     ('Alice', 'Smith', 'fd29'),--3
     ('Max', 'Parker', 'fd89'),--4
