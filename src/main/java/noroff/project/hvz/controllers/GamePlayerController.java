@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Collection;
 
 @CrossOrigin(maxAge = 3600)
@@ -38,8 +39,8 @@ public class GamePlayerController {
 
     @Operation(summary = "Creates a new player.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/player/
-    public ResponseEntity<?> add(@PathVariable int gameId, @RequestHeader("keycloak_player_uuid") String userUuid) {
-        playerService.addWithDefaultValues(userUuid,gameId);
+    public ResponseEntity<?> add(Principal principal, @PathVariable int gameId) {
+        playerService.addWithDefaultValues(principal.getName(),gameId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
