@@ -10,8 +10,6 @@ import noroff.project.hvz.services.BiteService;
 import noroff.project.hvz.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -47,10 +45,8 @@ public class BiteController {
 
     @Operation(summary = "Creates a bite object by looking up the victim by the specified bite code.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/bite/
-    public ResponseEntity<?> add(@PathVariable int gameId, @RequestBody BitePostDto bite, @AuthenticationPrincipal Jwt jwt, Principal pr) {
-        System.out.println(pr.getName());
-        System.out.println(jwt.getClaimAsString("sub"));
-        Player biter = playerService.findByGameIdAndAppUserUuid(gameId,jwt.getClaimAsString("sub"));
+    public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @RequestBody BitePostDto bite) {
+        Player biter = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
         biteService.add(biteMapper.toBitePost(bite, gameId, biter));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

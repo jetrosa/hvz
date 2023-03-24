@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 
@@ -77,16 +78,17 @@ public class GameController {
 
     @Operation(summary = "Returns a list of faction-specific chat messages.")
     @GetMapping("{gameId}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
-    public ResponseEntity<List<ChatMessageGetDto>> getChatById(@PathVariable int gameId, @RequestHeader("player-id") int playerId) {
-        Player player = playerService.findById(playerId);
+    public ResponseEntity<List<ChatMessageGetDto>> getChatById(Principal principal, @PathVariable int gameId) {
+        Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
         List<ChatMessageGetDto> chatMessages = chatMessageService.findAllGlobalAndPlayerFactionMessages(gameId, player);
         return ResponseEntity.ok(chatMessages);
     }
 
     @Operation(summary = "Creates a new chat message.")
     @PostMapping("{gameId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
-    public ResponseEntity<?> add(@PathVariable int gameId, @RequestHeader("player-id") int playerId, @RequestBody ChatMessagePostDto chatMessage) {
-        chatMessageService.add(chatMessageMapper.toChatMessage(chatMessage, gameId, playerId));
+    public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @RequestBody ChatMessagePostDto chatMessage) {
+        Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
+        chatMessageService.add(chatMessageMapper.toChatMessage(chatMessage, gameId, player));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
