@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class PlayerServiceImpl implements PlayerService{
@@ -99,7 +99,7 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     @Override
-    public Set<Player> findAllByGameId(Integer gameId) {
+    public List<Player> findAllByGameId(Integer gameId) {
         return playerRepository.findAllByGameId(gameId);
     }
 

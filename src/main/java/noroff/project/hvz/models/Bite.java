@@ -6,12 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Getter
@@ -20,9 +21,11 @@ public class Bite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @CreationTimestamp
     @NotNull(message = "Time of death may not be null")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime timeOfDeath;
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private OffsetDateTime timeOfDeath;
     @Size(min = 5, max = 100, message = "Story must be between 5 and 100 characters long")
     private String story;
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")

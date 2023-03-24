@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class GamePostDto {
@@ -17,7 +17,7 @@ public class GamePostDto {
     private String description;
     @NotNull(message = "Start time  may not be null")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime startDateTime;
+    private OffsetDateTime startDateTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime endDateTime;
+    private OffsetDateTime endDateTime;
 }

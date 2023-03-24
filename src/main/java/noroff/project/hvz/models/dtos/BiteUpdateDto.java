@@ -6,13 +6,13 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class BiteUpdateDto {
     @NotNull(message = "Time of death may not be null")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime timeOfDeath;
+    private OffsetDateTime timeOfDeath;
     @Size(min = 5, max = 100, message = "Story must be between 5 and 100 characters long")
     private String story;
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
