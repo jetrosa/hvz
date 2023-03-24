@@ -66,6 +66,15 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public List<Player> findAllByAppUserUuid(String uuid) {
+        return playerRepository.findAllByAppUserUuid(uuid).orElseThrow(() -> {
+                    logger.warn("No player exists with UUID: " + uuid);
+                    return new UserNotFoundException();
+                }
+        );
+    }
+
+    @Override
     public Player addWithDefaultValues(String userUuid, int gameId) {
         Game game = gameService.findById(gameId);
         if (game == null)

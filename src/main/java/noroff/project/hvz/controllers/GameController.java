@@ -37,7 +37,8 @@ public class GameController {
 
     @Operation(summary = "Returns a list of games.")
     @GetMapping // GET: localhost:8080/api/v1/game
-    public ResponseEntity<Collection<GameGetDto>> getAll() {
+    public ResponseEntity<Collection<GameGetDto>> getAll(Principal principal) {
+        System.out.println(principal.getName());
         List<GameGetDto> games = gameMapper.toGameDto(gameService.findAll());
         return ResponseEntity.ok(games);
     }
