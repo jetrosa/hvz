@@ -20,4 +20,6 @@ public interface PlayerRepository extends JpaRepository<Player, Integer> {
     boolean existsByGameAndAppUser(Game game, AppUser user);
     @EntityGraph(attributePaths = {"appUser"})
     Optional<Player> findByGameIdAndAppUserUuid(int gameId, String uuid);
+    @EntityGraph(attributePaths = {"appUser"})
+    Optional<List<Player>> findAllByAppUserUuid(String uuid);
 }

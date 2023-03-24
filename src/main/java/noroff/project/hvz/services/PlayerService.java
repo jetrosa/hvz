@@ -15,4 +15,5 @@ public interface PlayerService extends CrudService<Player, Integer> {
     PlayerWithNameAndSquadWithoutBiteCodeDto findPlayerWithNameAndSquadByIdWithoutBiteCode(Player player);
     Player findPlayerByBiteCode(String biteCode);
     void updateWithDto(PlayerUpdateDto player, int playerId);
+    List<Player> findAllByAppUserUuid(String uuid);
 }
