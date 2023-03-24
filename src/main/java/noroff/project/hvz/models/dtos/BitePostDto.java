@@ -5,11 +5,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class BitePostDto {
-    private LocalDateTime timeOfDeath = LocalDateTime.now();
+    private OffsetDateTime timeOfDeath = OffsetDateTime.now();
     @Size(min = 5, max = 100, message = "Story must be between 5 and 100 characters long")
     private String story;
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")

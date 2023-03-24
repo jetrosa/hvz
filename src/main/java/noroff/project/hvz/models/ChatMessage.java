@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Getter
@@ -25,10 +25,9 @@ public class ChatMessage {
     private Boolean isHumanGlobal=false;
     private Boolean isZombieGlobal=false;
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "chat_time")
+    @Column(name = "chat_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime chat_time;
+    private OffsetDateTime chat_time;
     @JsonIgnore
     @NotNull(message = "Game may not be null")
     @ManyToOne

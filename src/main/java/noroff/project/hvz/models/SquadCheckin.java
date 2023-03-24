@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Getter
@@ -19,14 +19,15 @@ public class SquadCheckin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "Start datetime may not be null")
-    @Column(name = "start_date_time")
+    @Column(name = "start_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime startTime;
+    private OffsetDateTime startTime;
     @NotNull(message = "End datetime may not be null")
-    @Column(name = "end_date_time")
+    @Column(name = "end_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime endTime;
+    private OffsetDateTime endTime;
     @NotNull(message = "Latitude may not be null")
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
     private Double latitude;

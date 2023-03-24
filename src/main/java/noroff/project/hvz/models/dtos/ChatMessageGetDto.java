@@ -2,13 +2,13 @@ package noroff.project.hvz.models.dtos;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class ChatMessageGetDto {
     private String message;
     private Boolean isHumanGlobal;
     private Boolean isZombieGlobal;
-    private LocalDateTime chat_time;
+    private OffsetDateTime chat_time;
     private PlayerWithNameAndSquadWithoutBiteCodeDto player;
 }

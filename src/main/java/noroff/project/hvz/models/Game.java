@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -32,13 +32,13 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private GameState gameState = GameState.REGISTRATION;
     @NotNull(message = "Start time  may not be null")
-    @Column(name = "start_date_time")
+    @Column(name = "start_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime startDateTime;
+    private OffsetDateTime startDateTime;
     @NotNull(message = "End time  may not be null")
-    @Column(name = "end_date_time")
+    @Column(name = "end_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime endDateTime;
+    private OffsetDateTime endDateTime;
     @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MapCoordinate> mapCoordinates;
