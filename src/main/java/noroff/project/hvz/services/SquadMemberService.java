@@ -10,9 +10,7 @@ public interface SquadMemberService extends CrudService<SquadMember, Integer> {
     SquadMemberWithPlayerNameDto getSquadMemberWithPlayerName(SquadMember squadMember);
     void leaveSquad(int playerId);
     void joinSquad(int squadId, Player player);
-
     @Transactional
-    void createAndJoin(Squad squad, Player player);
-
+    Squad createAndJoin(Squad squad, Player player);
     SquadMember findByPlayerId(int playerId);
 }

@@ -46,13 +46,10 @@ public class ChatMessageServiceImpl implements ChatMessageService{
     }
 
     @Override
-    public void addSquadChat(ChatMessage message, int squadId) {
+    public ChatMessage addSquadChat(ChatMessage message, int squadId) {
         Squad s = squadService.findById(squadId);
-        if(s!=null)
-        {
-            message.setSquad(s);
-            add(message);
-        }
+        message.setSquad(s);
+        return add(message);
     }
 
     @Override

@@ -65,17 +65,18 @@ public class GameServiceImpl implements GameService{
 
     @Transactional
     @Override
-    public void createGameWithMap(Game game, List<MapCoordinateDto> mapCoordinateDtos) {
-        Game g=add(game);
+    public Game createGameWithMap(Game game, List<MapCoordinateDto> mapCoordinateDtos) {
+        Game newGame=add(game);
         List<MapCoordinate> mapCoordinates = new ArrayList<>();
         for(MapCoordinateDto dto: mapCoordinateDtos){
             MapCoordinate m = new MapCoordinate();
             m.setLatitude(dto.getLatitude());
             m.setLongitude(dto.getLongitude());
-            m.setGame(g);
+            m.setGame(newGame);
             mapCoordinates.add(m);
         }
         mapCoordinateRepository.saveAll(mapCoordinates);
+        return newGame;
     }
     @Transactional
     @Override

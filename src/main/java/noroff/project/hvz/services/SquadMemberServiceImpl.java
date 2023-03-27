@@ -104,10 +104,11 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
 
     @Transactional
     @Override
-    public void createAndJoin(Squad squad, Player player) {
+    public Squad createAndJoin(Squad squad, Player player) {
         squad.setIsHuman(player.getIsHuman());
         Squad createdSquad = squadService.add(squad);
         joinSquad(createdSquad.getId(), player);
+        return createdSquad;
     }
 
     @Override

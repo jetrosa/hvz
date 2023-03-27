@@ -2,16 +2,18 @@ package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.mappers.BiteMapper;
+import noroff.project.hvz.models.Bite;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.dtos.BiteGetDto;
 import noroff.project.hvz.models.dtos.BitePostDto;
 import noroff.project.hvz.models.dtos.BiteUpdateDto;
 import noroff.project.hvz.services.BiteService;
 import noroff.project.hvz.services.PlayerService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
@@ -47,8 +49,14 @@ public class BiteController {
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/bite/
     public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @RequestBody BitePostDto bite) {
         Player biter = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
-        biteService.add(biteMapper.toBitePost(bite, gameId, biter));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Bite createdBite = biteService.add(biteMapper.toBitePost(bite, gameId, biter));
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdBite.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Updates a bite object. Admin or biter only.")
