@@ -37,7 +37,7 @@ public abstract class SquadMapper {
     @Named("squadMemberInfo")
     List<PlayerWithNameAndSquadDto> mapSquadMembers(List<SquadMember> squadMembers) {
         return squadMembers.stream()
-                .map(i -> playerService.findPlayerWithNameAndSquadById(i.getId()))
+                .map(i -> playerService.findPlayerWithNameAndSquadById(i.getPlayer().getId()))
                 .collect(Collectors.toList());
     }
 }
