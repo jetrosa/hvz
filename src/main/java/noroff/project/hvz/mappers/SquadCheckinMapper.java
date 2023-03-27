@@ -24,7 +24,7 @@ public abstract class SquadCheckinMapper {
     public abstract List<SquadCheckinGetDto> toSquadCheckinDto(List<SquadCheckin> squadCheckin);
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
     @Mapping(target = "squad", source = "squadId", qualifiedByName = "squadIdToSquad")
-    @Mapping(target = "squadMember", source = "player")
+    @Mapping(target = "squadMember", source = "player.id", qualifiedByName = "playerIdToSquadMember")
     @Mapping(target = "id", ignore = true)
     public abstract SquadCheckin toSquadCheckin(SquadCheckinPostDto squadCheckinPostDto, int gameId, int squadId, Player player);
 
