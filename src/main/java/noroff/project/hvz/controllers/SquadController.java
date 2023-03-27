@@ -5,6 +5,7 @@ import noroff.project.hvz.mappers.ChatMessageMapper;
 import noroff.project.hvz.mappers.SquadCheckinMapper;
 import noroff.project.hvz.mappers.SquadMapper;
 import noroff.project.hvz.models.Player;
+import noroff.project.hvz.models.SquadMember;
 import noroff.project.hvz.models.dtos.*;
 import noroff.project.hvz.services.*;
 import org.springframework.http.HttpStatus;
@@ -119,6 +120,9 @@ public class SquadController {
     @PostMapping("{squadId}/check-in") // POST: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/check-in
     public ResponseEntity<?> addSquadCheckin(Principal principal, @PathVariable int gameId, @PathVariable int squadId, @RequestBody SquadCheckinPostDto squadCheckin) {
         Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
+        SquadMember s = squadMemberService.findByPlayerId(player.getId());
+        if(s.getSquad().getId()!=squadId)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         squadCheckinService.addOrUpdate(squadCheckinMapper.toSquadCheckin(squadCheckin,gameId, squadId, player)) ;
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
