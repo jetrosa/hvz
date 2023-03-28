@@ -46,7 +46,6 @@ VALUES
     (false, false, 'hw4g', 7,1),
     (false, false, 'hw4h', 8,1),
     (true, false, 'hw4i', 9,1),
-    (true, false, 'hw4j', 10,1),
 
     (true, true, 'hw5a', 1,2),
     (false, false, 'hw5b', 2,2);
@@ -58,7 +57,7 @@ VALUES
     (24.9683189, 60.1814986, timestamp '2023-03-27 00:57:14',1,1,6),
     (24.9699497, 60.1835151, timestamp '2023-03-27 00:59:14',1,3,7),
 
-    (24.9463248, 60.1755762, timestamp '2023-03-12 00:59:14',2,11,12);
+    (24.9463248, 60.1755762, timestamp '2023-03-12 00:59:14',2,11,11);
 
 
 INSERT INTO squad (is_human, squad_name, game_id)
