@@ -46,7 +46,6 @@ VALUES
     (false, false, 'hw4g', 7,1),
     (false, false, 'hw4h', 8,1),
     (true, false, 'hw4i', 9,1),
-    (true, false, 'hw4j', 10,1),
 
     (true, true, 'hw5a', 1,2),
     (false, false, 'hw5b', 2,2);
