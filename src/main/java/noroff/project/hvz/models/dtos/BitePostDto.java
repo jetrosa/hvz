@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 @Data
 public class BitePostDto {
     private OffsetDateTime timeOfDeath = OffsetDateTime.now();
-    @Size(min = 5, max = 100, message = "Story must be between 5 and 100 characters long")
+    @Size(max = 50, message = "Story may be up to 50 characters long")
     private String story;
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
     private Double latitude;
