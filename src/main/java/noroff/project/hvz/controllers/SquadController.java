@@ -4,14 +4,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.mappers.ChatMessageMapper;
 import noroff.project.hvz.mappers.SquadCheckinMapper;
 import noroff.project.hvz.mappers.SquadMapper;
-import noroff.project.hvz.models.Player;
-import noroff.project.hvz.models.SquadMember;
+import noroff.project.hvz.models.*;
 import noroff.project.hvz.models.dtos.*;
 import noroff.project.hvz.services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
@@ -76,8 +77,14 @@ public class SquadController {
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/squad
     public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @RequestBody SquadPostDto squad) {
         Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
-        squadMemberService.createAndJoin(squadMapper.toSquad(squad, gameId), player);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Squad createdSquad = squadMemberService.createAndJoin(squadMapper.toSquad(squad, gameId), player);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdSquad.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Updates a squad object. Admin only.")
@@ -105,8 +112,14 @@ public class SquadController {
     @PostMapping("{squadId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @PathVariable int squadId, @RequestBody ChatMessageSquadPostDto chatMessage) {
         Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
-        chatMessageService.addSquadChat(chatMessageMapper.toSquadChatMessage(chatMessage, gameId, player), squadId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        ChatMessage createdChat = chatMessageService.addSquadChat(chatMessageMapper.toSquadChatMessage(chatMessage, gameId, player), squadId);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdChat.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Get a list of squad check-in markers.")
@@ -123,8 +136,14 @@ public class SquadController {
         SquadMember s = squadMemberService.findByPlayerId(player.getId());
         if(s.getSquad().getId()!=squadId)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        squadCheckinService.addOrUpdate(squadCheckinMapper.toSquadCheckin(squadCheckin,gameId, squadId, player)) ;
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        SquadCheckin createdSquadCheckin = squadCheckinService.addOrUpdate(squadCheckinMapper.toSquadCheckin(squadCheckin,gameId, squadId, player)) ;
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdSquadCheckin.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 

@@ -3,16 +3,18 @@ package noroff.project.hvz.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.mappers.ChatMessageMapper;
 import noroff.project.hvz.mappers.GameMapper;
+import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.dtos.*;
 import noroff.project.hvz.services.ChatMessageService;
 import noroff.project.hvz.services.GameService;
 import noroff.project.hvz.services.PlayerService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
@@ -52,8 +54,14 @@ public class GameController {
     @Operation(summary = "Creates a new game. Admin only.")
     @PostMapping // POST: localhost:8080/api/v1/game
     public ResponseEntity<?> add(@RequestBody GameAndCoordinatesDto g) {
-        gameService.createGameWithMap(gameMapper.toGame(g.getGameDto()), g.getMapCoordinateDtos());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Game createdGame = gameService.createGameWithMap(gameMapper.toGame(g.getGameDto()), g.getMapCoordinateDtos());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdGame.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Updates a game. Admin only.")
@@ -88,8 +96,14 @@ public class GameController {
     @PostMapping("{gameId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @RequestBody ChatMessagePostDto chatMessage) {
         Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
-        chatMessageService.add(chatMessageMapper.toChatMessage(chatMessage, gameId, player));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        ChatMessage chat = chatMessageService.add(chatMessageMapper.toChatMessage(chatMessage, gameId, player));
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(chat.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 
