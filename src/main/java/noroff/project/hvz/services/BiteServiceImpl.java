@@ -52,11 +52,18 @@ public class BiteServiceImpl implements BiteService {
             Player player = bite.getVictim();
             SquadMember s = squadMemberService.findByPlayerId(player.getId());
             if(s!=null) {
-                ChatMessage message = new ChatMessage();
-                message.setGame(player.getGame());
-                message.setPlayer(player);
-                message.setMessage("**turned into a zombie**");
-                chatMessageService.addSquadChat(message,s.getSquad().getId());
+                ChatMessage bittenSquadChat = new ChatMessage();
+                bittenSquadChat.setGame(player.getGame());
+                bittenSquadChat.setPlayer(player);
+                bittenSquadChat.setMessage("**turned into a zombie**");
+                chatMessageService.addSquadChat(bittenSquadChat,s.getSquad().getId());
+                ChatMessage bittenFactionChat=new ChatMessage();
+                bittenFactionChat.setGame(player.getGame());
+                bittenFactionChat.setPlayer(player);
+                bittenFactionChat.setMessage("**turned into a zombie**");
+                bittenFactionChat.setIsHumanGlobal(true);
+                chatMessageService.add(bittenFactionChat);
+
                 squadMemberService.delete(s);
             }
             bite.getVictim().setIsHuman(false);
