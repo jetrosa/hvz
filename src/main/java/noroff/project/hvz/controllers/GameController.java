@@ -96,7 +96,7 @@ public class GameController {
     @PostMapping("{gameId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @RequestBody ChatMessagePostDto chatMessage) {
         Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
-        ChatMessage chat = chatMessageService.add(chatMessageMapper.toChatMessage(chatMessage, gameId, player));
+        ChatMessage chat = chatMessageService.addGlobalOrFactionChat(chatMessageMapper.toChatMessage(chatMessage, gameId, player));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

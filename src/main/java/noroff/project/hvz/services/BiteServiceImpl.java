@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.DuplicateKeyException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.Bite;
+import noroff.project.hvz.models.ChatMessage;
 import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.SquadMember;
 import noroff.project.hvz.repositories.BiteRepository;
@@ -20,11 +21,13 @@ public class BiteServiceImpl implements BiteService {
     private final Logger logger = LoggerFactory.getLogger(BiteServiceImpl.class);
     private final SquadMemberService squadMemberService;
     private final PlayerService playerService;
+    private final ChatMessageService chatMessageService;
 
-    public BiteServiceImpl(BiteRepository biteRepository, SquadMemberService squadMemberService, PlayerService playerService){
+    public BiteServiceImpl(BiteRepository biteRepository, SquadMemberService squadMemberService, PlayerService playerService, ChatMessageService chatMessageService){
         this.biteRepository = biteRepository;
         this.squadMemberService = squadMemberService;
         this.playerService = playerService;
+        this.chatMessageService = chatMessageService;
     }
     @Override
     public Bite findById(Integer id) {
@@ -48,8 +51,21 @@ public class BiteServiceImpl implements BiteService {
         if(!isVictimAlreadyBitten){
             Player player = bite.getVictim();
             SquadMember s = squadMemberService.findByPlayerId(player.getId());
-            if(s!=null)
+            if(s!=null) {
+                ChatMessage bittenSquadChat = new ChatMessage();
+                bittenSquadChat.setGame(player.getGame());
+                bittenSquadChat.setPlayer(player);
+                bittenSquadChat.setMessage("**turned into a zombie**");
+                chatMessageService.addSquadChat(bittenSquadChat,s.getSquad().getId());
+                ChatMessage bittenFactionChat=new ChatMessage();
+                bittenFactionChat.setGame(player.getGame());
+                bittenFactionChat.setPlayer(player);
+                bittenFactionChat.setMessage("**turned into a zombie**");
+                bittenFactionChat.setIsHumanGlobal(true);
+                chatMessageService.add(bittenFactionChat);
+
                 squadMemberService.delete(s);
+            }
             bite.getVictim().setIsHuman(false);
             playerService.update(player);
             return biteRepository.save(bite);
