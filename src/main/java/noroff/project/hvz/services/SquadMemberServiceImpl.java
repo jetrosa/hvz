@@ -2,6 +2,7 @@ package noroff.project.hvz.services;
 
 import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.DuplicateKeyException;
+import noroff.project.hvz.customexceptions.FactionMismatchException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.models.Player;
@@ -86,6 +87,9 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
             throw new DuplicateKeyException("player_id");
 
         Squad squad = squadService.findById(squadId);
+        if(player.getIsHuman()!=squad.getIsHuman()){
+            throw new FactionMismatchException(player.getIsHuman(), "squad");
+        }
         SquadMember s = new SquadMember();
         s.setSquad(squad);
         s.setPlayer(player);

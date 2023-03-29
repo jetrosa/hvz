@@ -1,6 +1,7 @@
 package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import noroff.project.hvz.customexceptions.InvalidSquadException;
 import noroff.project.hvz.mappers.ChatMessageMapper;
 import noroff.project.hvz.mappers.SquadCheckinMapper;
 import noroff.project.hvz.mappers.SquadMapper;
@@ -103,7 +104,12 @@ public class SquadController {
 
     @Operation(summary = "Returns a list of squad chat messages.")
     @GetMapping("{squadId}/chat") // GET: localhost:8080/api/v1/game/<game_id>/squad/<squad_id>/chat
-    public ResponseEntity<List<ChatMessageGetDto>> getChatById(@PathVariable int squadId) {
+    public ResponseEntity<List<ChatMessageGetDto>> getChatById(Principal principal, @PathVariable int gameId, @PathVariable int squadId) {
+        Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
+        SquadMember member = squadMemberService.findByPlayerId(player.getId());
+        if(member==null||player.getId()!= member.getPlayer().getId()){
+            throw new InvalidSquadException(player.getId(), squadId);
+        }
         List<ChatMessageGetDto> chatMessages = chatMessageService.findAllBySquadId(squadId);
         return ResponseEntity.ok(chatMessages);
     }
