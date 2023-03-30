@@ -10,5 +10,6 @@ import java.util.Set;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Integer> {
     Set<ChatMessage> findAllByGameId(final int gameId);
     Set<ChatMessage> findAllBySquadId(final int squadId);
-    Set<ChatMessage> findAllByGameIdAndIsHumanGlobalAndSquadIsNullOrIsZombieGlobalAndSquadIsNull(final int gameId, final boolean isHumanGlobal, final boolean isZombieGlobal);
+    Set<ChatMessage> findAllByGameIdAndSquadIsNullAndIsHumanGlobalIsTrue(final int gameId);
+    Set<ChatMessage> findAllByGameIdAndSquadIsNullAndIsZombieGlobalIsTrue(final int gameId);
 }
