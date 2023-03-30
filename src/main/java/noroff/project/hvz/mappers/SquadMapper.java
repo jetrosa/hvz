@@ -27,6 +27,11 @@ public abstract class SquadMapper {
     @Mapping(target = "squadMembers", source = "squadMembers", qualifiedByName = "squadMemberInfo")
     public abstract SquadGetDto toSquadDto(Squad squad);
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isHuman", ignore = true)
+    @Mapping(target = "squadMembers", ignore = true)
+    @Mapping(target = "squadCheckins", ignore = true)
+    @Mapping(target = "chatMessages", ignore = true)
     public abstract Squad toSquad(SquadPostDto squadPostDto, int gameId);
 
     @Named("gameIdToGame")
