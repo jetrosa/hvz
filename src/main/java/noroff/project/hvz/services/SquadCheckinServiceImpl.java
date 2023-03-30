@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 
 @Service
@@ -35,9 +35,16 @@ public class SquadCheckinServiceImpl implements SquadCheckinService{
 
     @Override
     public SquadCheckin add(SquadCheckin squadCheckin) {
-        LocalDateTime now = LocalDateTime.now();
+        return squadCheckinRepository.save(squadCheckin);
+    }
+
+    public SquadCheckin addOrUpdate(SquadCheckin squadCheckin) {
+        OffsetDateTime now = OffsetDateTime.now();
         squadCheckin.setStartTime(now);
         squadCheckin.setEndTime(now.plusMinutes(30));
+        SquadCheckin old = squadCheckinRepository.getBySquadMemberId(squadCheckin.getSquadMember().getId());
+        if(old!=null)
+            squadCheckin.setId(old.getId());
         return squadCheckinRepository.save(squadCheckin);
     }
 
@@ -54,6 +61,5 @@ public class SquadCheckinServiceImpl implements SquadCheckinService{
     @Override
     public void delete(SquadCheckin squadCheckin) {
         squadCheckinRepository.delete(squadCheckin);
-        //todo chatmessage
     }
 }

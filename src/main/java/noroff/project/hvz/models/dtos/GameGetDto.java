@@ -4,7 +4,7 @@ import lombok.Data;
 import noroff.project.hvz.models.GameState;
 import noroff.project.hvz.models.MapCoordinate;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -13,7 +13,8 @@ public class GameGetDto {
     private String name;
     private String description;
     private GameState gameState;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private OffsetDateTime startDateTime;
+    private OffsetDateTime endDateTime;
     private List<MapCoordinate> mapCoordinates;
+    private int playerCount;
 }

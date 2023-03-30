@@ -1,0 +1,22 @@
+services:
+  app:
+    image: 'hvz-backend:latest'
+    build:
+      context: .
+    container_name: hvz-backend
+    depends_on:
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+    ports:
+        - "8080:8080"
+
+  db:
+    image: 'postgres:15.2-alpine'
+    container_name: hvz-db
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres

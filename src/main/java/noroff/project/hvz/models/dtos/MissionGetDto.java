@@ -2,7 +2,7 @@ package noroff.project.hvz.models.dtos;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class MissionGetDto {
@@ -12,8 +12,8 @@ public class MissionGetDto {
     private Boolean isHumanVisible;
     private Boolean isZombieVisible;
     private String description;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private OffsetDateTime startTime;
+    private OffsetDateTime endTime;
     private Double latitude;
     private Double longitude;
 }

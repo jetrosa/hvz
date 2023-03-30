@@ -2,6 +2,7 @@ package noroff.project.hvz.services;
 
 import jakarta.transaction.Transactional;
 import noroff.project.hvz.customexceptions.DuplicateKeyException;
+import noroff.project.hvz.customexceptions.FactionMismatchException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
 import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.models.Player;
@@ -21,12 +22,10 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
     private final SquadService squadService;
     private final SquadMemberRepository squadMemberRepository;
     private final Logger logger = LoggerFactory.getLogger(SquadMemberServiceImpl.class);
-    private final PlayerService playerService;
 
-    public SquadMemberServiceImpl(SquadMemberRepository squadMemberRepository, SquadService squadService, PlayerService playerService){
+    public SquadMemberServiceImpl(SquadMemberRepository squadMemberRepository, SquadService squadService){
         this.squadMemberRepository=squadMemberRepository;
         this.squadService=squadService;
-        this.playerService=playerService;
     }
     @Override
     public SquadMember findById(Integer id) {
@@ -83,12 +82,14 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
     }
 
     @Override
-    public void joinSquad(int squadId, int playerId) {
-        if(squadMemberRepository.existsByPlayerId(playerId))
+    public void joinSquad(int squadId, Player player) {
+        if(squadMemberRepository.existsByPlayerId(player.getId()))
             throw new DuplicateKeyException("player_id");
 
         Squad squad = squadService.findById(squadId);
-        Player player = playerService.findById(playerId);
+        if(player.getIsHuman()!=squad.getIsHuman()){
+            throw new FactionMismatchException(player.getIsHuman(), "squad");
+        }
         SquadMember s = new SquadMember();
         s.setSquad(squad);
         s.setPlayer(player);
@@ -107,13 +108,11 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
 
     @Transactional
     @Override
-    public void createAndJoin(Squad squad, int playerId) {
-        if(squadMemberRepository.existsByPlayerId(playerId))
-            throw new DuplicateKeyException("player_id");
-        Player player = playerService.findById(playerId);
+    public Squad createAndJoin(Squad squad, Player player) {
         squad.setIsHuman(player.getIsHuman());
         Squad createdSquad = squadService.add(squad);
-        joinSquad(createdSquad.getId(), playerId);
+        joinSquad(createdSquad.getId(), player);
+        return createdSquad;
     }
 
     @Override

@@ -2,11 +2,11 @@ package noroff.project.hvz.models.dtos;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class BiteGetDto {
-    private LocalDateTime timeOfDeath;
+    private OffsetDateTime timeOfDeath;
     private String story;
     private Double latitude;
     private Double longitude;

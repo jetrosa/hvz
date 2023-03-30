@@ -2,12 +2,12 @@ package noroff.project.hvz.models.dtos;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class SquadCheckinGetDto {
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private OffsetDateTime startTime;
+    private OffsetDateTime endTime;
     private Double latitude;
     private Double longitude;
 }

@@ -2,13 +2,15 @@ package noroff.project.hvz.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import noroff.project.hvz.mappers.MissionMapper;
+import noroff.project.hvz.models.Mission;
 import noroff.project.hvz.models.dtos.MissionGetDto;
 import noroff.project.hvz.models.dtos.MissionPostDto;
 import noroff.project.hvz.services.MissionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Set;
 
 @CrossOrigin(maxAge = 3600)
@@ -40,8 +42,14 @@ public class MissionController {
     @Operation(summary = "Creates a mission object.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/mission/
     public ResponseEntity<?> add(@PathVariable int gameId, @RequestBody MissionPostDto mission) {
-        missionService.add(missionMapper.toMission(mission, gameId));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Mission newMission = missionService.add(missionMapper.toMission(mission, gameId));
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newMission.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Updates a mission object. Admin only.")

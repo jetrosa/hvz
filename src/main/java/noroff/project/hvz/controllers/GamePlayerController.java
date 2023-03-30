@@ -5,10 +5,12 @@ import noroff.project.hvz.models.Player;
 import noroff.project.hvz.models.dtos.PlayerUpdateDto;
 import noroff.project.hvz.models.dtos.PlayerWithNameAndSquadDto;
 import noroff.project.hvz.services.PlayerService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.security.Principal;
 import java.util.Collection;
 
 @CrossOrigin(maxAge = 3600)
@@ -38,9 +40,15 @@ public class GamePlayerController {
 
     @Operation(summary = "Creates a new player.")
     @PostMapping // POST: localhost:8080/api/v1/game/{gameId}/player/
-    public ResponseEntity<?> add(@PathVariable int gameId, @RequestHeader("keycloak_player_uuid") String userUuid) {
-        playerService.addWithDefaultValues(userUuid,gameId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> add(Principal principal, @PathVariable int gameId) {
+        Player player = playerService.addWithDefaultValues(principal.getName(),gameId);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(player.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Updates a player. Admin only.")

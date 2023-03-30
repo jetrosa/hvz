@@ -2,6 +2,7 @@ package noroff.project.hvz.services;
 
 import noroff.project.hvz.customexceptions.DuplicateKeyException;
 import noroff.project.hvz.customexceptions.RecordNotFoundException;
+import noroff.project.hvz.customexceptions.UserNotFoundException;
 import noroff.project.hvz.models.AppUser;
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.models.Player;
@@ -17,22 +18,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Service
-public class PlayerServiceImpl implements PlayerService{
+public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
     private final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
     private final SquadMemberRepository squadMemberRepository;
     private final GameService gameService;
     private final AppUserService appUserService;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, SquadMemberRepository squadMemberRepository, GameService gameService, AppUserService appUserService){
-        this.playerRepository=playerRepository;
+    public PlayerServiceImpl(PlayerRepository playerRepository, SquadMemberRepository squadMemberRepository, GameService gameService, AppUserService appUserService) {
+        this.playerRepository = playerRepository;
         this.squadMemberRepository = squadMemberRepository;
         this.gameService = gameService;
         this.appUserService = appUserService;
     }
+
     @Override
     public Player findById(Integer id) {
         return playerRepository.findById(id)
@@ -54,17 +56,36 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     @Override
+    public Player findByGameIdAndAppUserUuid(int gameId, String uuid) {
+        return playerRepository.findByGameIdAndAppUserUuid(gameId, uuid)
+                .orElseThrow(() -> {
+                            logger.warn("No player exists with UUID: " + uuid);
+                            return new UserNotFoundException();
+                        }
+                );
+    }
+
+    @Override
+    public List<Player> findAllByAppUserUuid(String uuid) {
+        return playerRepository.findAllByAppUserUuid(uuid).orElseThrow(() -> {
+                    logger.warn("No player exists with UUID: " + uuid);
+                    return new UserNotFoundException();
+                }
+        );
+    }
+
+    @Override
     public Player addWithDefaultValues(String userUuid, int gameId) {
         Game game = gameService.findById(gameId);
-        if(game==null)
+        if (game == null)
             throw new RecordNotFoundException("game", gameId);
         AppUser user = appUserService.findByUuid(userUuid);
 
-        if(playerRepository.existsByGameAndAppUser(game, user))
+        if (playerRepository.existsByGameAndAppUser(game, user))
             throw new DuplicateKeyException("game, user");
 
         String biteCode = generateBiteCode();
-        if(biteCode==null)
+        if (biteCode == null)
             throw new DuplicateKeyException("generated bitecode");
 
         Player player = new Player();
@@ -99,48 +120,48 @@ public class PlayerServiceImpl implements PlayerService{
     }
 
     @Override
-    public Set<Player> findAllByGameId(Integer gameId) {
+    public List<Player> findAllByGameId(Integer gameId) {
         return playerRepository.findAllByGameId(gameId);
     }
 
     @Override
     public PlayerWithNameAndSquadDto findPlayerWithNameAndSquadById(int playerId) {
-        Player  p = findById(playerId);
+        Player p = findById(playerId);
         AppUser a = p.getAppUser();
-        String fullName = a.getFirstName()+" "+a.getLastName();
+        String fullName = a.getFirstName() + " " + a.getLastName();
         SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
         Integer squadId = null;
-        if(s!=null) squadId = s.getSquad().getId();
+        if (s != null) squadId = s.getSquad().getId();
 
-        return new PlayerWithNameAndSquadDto(p.getIsHuman(),p.getBiteCode(),fullName,squadId);
+        return new PlayerWithNameAndSquadDto(p.getIsHuman(), p.getBiteCode(), fullName, squadId);
     }
 
     @Override
     public PlayerWithNameAndSquadWithoutBiteCodeDto findPlayerWithNameAndSquadByIdWithoutBiteCode(Player p) {
         AppUser a = p.getAppUser();
-        String fullName = a.getFirstName()+" "+a.getLastName();
+        String fullName = a.getFirstName() + " " + a.getLastName();
         SquadMember s = squadMemberRepository.findByPlayerId(p.getId());
         Integer squadId = null;
-        if(s!=null) squadId = s.getSquad().getId();
+        if (s != null) squadId = s.getSquad().getId();
 
-        return new PlayerWithNameAndSquadWithoutBiteCodeDto(p.getIsHuman(),fullName,squadId);
+        return new PlayerWithNameAndSquadWithoutBiteCodeDto(p.getIsHuman(), fullName, squadId);
     }
 
     @Override
     public Player findPlayerByBiteCode(String biteCode) {
-        Player player =  playerRepository.findPlayerByBiteCode(biteCode);
-        if(player!=null)
+        Player player = playerRepository.findPlayerByBiteCode(biteCode);
+        if (player != null)
             return player;
         else
             throw new RecordNotFoundException("player", biteCode);
 
     }
 
-    private String generateBiteCode(){
+    private String generateBiteCode() {
 
-        for(int i = 0; i<10;i++){
+        for (int i = 0; i < 10; i++) {
             String biteCode = RandomIdGenerator.GetBase36(4);
-            if(!playerRepository.existsByBiteCode(biteCode)){
+            if (!playerRepository.existsByBiteCode(biteCode)) {
                 return biteCode;
             }
 

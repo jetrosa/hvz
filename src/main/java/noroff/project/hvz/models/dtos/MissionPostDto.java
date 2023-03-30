@@ -6,7 +6,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class MissionPostDto {
@@ -20,9 +20,9 @@ public class MissionPostDto {
     @Size(min = 2, max = 200, message = "Description must be between 2 and 200 characters long")
     private String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime startTime;
+    private OffsetDateTime startTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime endTime;
+    private OffsetDateTime endTime;
     @Range(min = -90, max = 90, message = "Valid latitude is between -90 and 90")
     private Double latitude;
     @Range(min = -180, max = 180, message = "Valid longitude is between -180 and 180")

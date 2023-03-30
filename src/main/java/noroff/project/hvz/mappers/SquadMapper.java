@@ -27,6 +27,11 @@ public abstract class SquadMapper {
     @Mapping(target = "squadMembers", source = "squadMembers", qualifiedByName = "squadMemberInfo")
     public abstract SquadGetDto toSquadDto(Squad squad);
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isHuman", ignore = true)
+    @Mapping(target = "squadMembers", ignore = true)
+    @Mapping(target = "squadCheckins", ignore = true)
+    @Mapping(target = "chatMessages", ignore = true)
     public abstract Squad toSquad(SquadPostDto squadPostDto, int gameId);
 
     @Named("gameIdToGame")
@@ -37,7 +42,7 @@ public abstract class SquadMapper {
     @Named("squadMemberInfo")
     List<PlayerWithNameAndSquadDto> mapSquadMembers(List<SquadMember> squadMembers) {
         return squadMembers.stream()
-                .map(i -> playerService.findPlayerWithNameAndSquadById(i.getId()))
+                .map(i -> playerService.findPlayerWithNameAndSquadById(i.getPlayer().getId()))
                 .collect(Collectors.toList());
     }
 }
