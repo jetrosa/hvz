@@ -5,11 +5,7 @@ plugins {
 }
 
 jar {
-	manifest {
-		attributes(
-				'Main-Class': 'noroff.project.hvz.HvzApplication'
-		)
-	}
+	enabled = false
 }
 
 group = 'com.example'
