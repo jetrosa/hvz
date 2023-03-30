@@ -12,7 +12,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors().disable()
+                .cors().and()
                 // Sessions will not be used
                 .sessionManagement().disable()
                 // Disable CSRF -- not necessary when there are no sessions
