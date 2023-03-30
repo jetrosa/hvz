@@ -2,6 +2,8 @@ package noroff.project.hvz.scheduled;
 
 import noroff.project.hvz.models.Game;
 import noroff.project.hvz.services.GameService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +12,7 @@ import java.util.Collection;
 
 @Component
 public class ScheduleService {
-
+    private final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
     private final GameService gameService;
     public ScheduleService(GameService gameService){
         this.gameService = gameService;
@@ -19,7 +21,7 @@ public class ScheduleService {
     public void gameStateService () {
         int infectionMinutes = 15;
 
-        System.out.println("testing scheduler");
+        logger.info("scheduler running - checking game state");
         Collection<Game> games = gameService.findAll();
 
         for(Game g: games){

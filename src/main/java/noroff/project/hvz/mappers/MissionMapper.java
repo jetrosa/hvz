@@ -19,6 +19,7 @@ public abstract class MissionMapper {
     public abstract MissionGetDto toMissionDto(Mission mission);
     public abstract Set<MissionGetDto> toMissionDto(Set<Mission> mission);
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
+    @Mapping(target = "id", ignore = true)
     public abstract Mission toMission(MissionPostDto missionPostDto, int gameId);
 
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
