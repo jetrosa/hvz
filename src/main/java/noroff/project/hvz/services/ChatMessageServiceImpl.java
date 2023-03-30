@@ -105,12 +105,16 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         return chatMessagesToDtos(messages);
     }
 
-
     @Transactional
     @Override
     public List<ChatMessageGetDto> findAllGlobalAndPlayerFactionMessages(int gameId, Player player) {
-        boolean isHumanGlobal = player.getIsHuman();
-        Set<ChatMessage> messages = chatMessageRepository.findAllByGameIdAndIsHumanGlobalAndSquadIsNullOrIsZombieGlobalAndSquadIsNull(gameId, isHumanGlobal, !isHumanGlobal);
+
+        Set<ChatMessage> messages;
+        if(player.getIsHuman()){
+            messages = chatMessageRepository.findAllByGameIdAndSquadIsNullAndIsHumanGlobalIsTrue(gameId);
+        }else{
+            messages = chatMessageRepository.findAllByGameIdAndSquadIsNullAndIsZombieGlobalIsTrue(gameId);
+        }
         return chatMessagesToDtos(messages);
     }
 
