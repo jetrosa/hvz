@@ -7,6 +7,9 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Swagger configuration enabling the option to authenticate in the UI.
+ */
 @Configuration
 public class OpenApi30Config {
 

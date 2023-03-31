@@ -45,6 +45,15 @@ public class BiteServiceImpl implements BiteService {
         return biteRepository.findAll();
     }
 
+    /**
+     * Add a bite to the database. Also sends a message to the faction chat and player's squad chat
+     * informing that the player has turned into a zombie. Sets the player status to zombie.
+     * <p><p><p>
+     * Throws an exception if the player has been bitten already.
+     *
+     * @param bite bite object
+     * @return created bite object
+     */
     @Transactional
     @Override
     public Bite add(Bite bite) {

@@ -62,6 +62,6 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser findByUuid(String uuid) {
         return appUserRepository.findByUuid(uuid)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(UserNotFoundException::new);
     }
 }

@@ -19,9 +19,16 @@ public class ScheduleService {
         this.gameService = gameService;
     }
 
+    /**
+     * Periodically find all games in the database and check their game state.
+     * <p>
+     * - game is not started -> check the time -> game state: infection, define a random patient zero player<p>
+     * - game state infection -> check start time + x -> game state: started, turn infected into zombies<p>
+     * - game in progress -> check end time -> game state:end<p>
+     */
     @Scheduled(fixedRate = 30000)
     public void gameStateService() {
-        int infectionMinutes = 15;
+        int infectionMinutes = 15; //infection state duration, after that the patient zero turns into a zombie
 
         logger.info("scheduler running - checking game state");
         Collection<Game> games = gameService.findAll();
@@ -45,10 +52,5 @@ public class ScheduleService {
                 }
             }
         }
-        //get games
-        //  check state
-        //      not started -> check time -> game state: infection
-        //      infection -> check start time+x -> game state: started, turn infected into zombies
-        //      in progress -> check end time -> state:end
     }
 }

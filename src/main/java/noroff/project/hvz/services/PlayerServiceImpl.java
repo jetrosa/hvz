@@ -74,6 +74,12 @@ public class PlayerServiceImpl implements PlayerService {
         );
     }
 
+    /**
+     * Creates a new player for a game, generates a bite code for the player.
+     * @param userUuid auth ID
+     * @param gameId ID of the game where the player is being created
+     * @return created player
+     */
     @Override
     public Player addWithDefaultValues(String userUuid, int gameId) {
         Game game = gameService.findById(gameId);

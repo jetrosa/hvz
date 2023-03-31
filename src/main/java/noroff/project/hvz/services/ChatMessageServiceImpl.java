@@ -52,6 +52,15 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         return chatMessageRepository.save(entity);
     }
 
+    /**
+     * Add the message to global of faction chat based on the humanGlobal and zombieGlobal params in the message.
+     * If both are true, it is a global message. If just one is true, the chat belongs to that faction.
+     * <p><p><p>
+     * Throws an error if both global params are false.
+     *
+     * @param message message body
+     * @return created chat message
+     */
     public ChatMessage addGlobalOrFactionChat(ChatMessage message) {
         boolean humanGlobal = message.getIsHumanGlobal();
         boolean zombieGlobal = message.getIsZombieGlobal();
