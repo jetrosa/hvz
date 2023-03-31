@@ -14,31 +14,33 @@ import java.util.Collection;
 public class ScheduleService {
     private final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
     private final GameService gameService;
-    public ScheduleService(GameService gameService){
+
+    public ScheduleService(GameService gameService) {
         this.gameService = gameService;
     }
+
     @Scheduled(fixedRate = 30000)
-    public void gameStateService () {
+    public void gameStateService() {
         int infectionMinutes = 15;
 
         logger.info("scheduler running - checking game state");
         Collection<Game> games = gameService.findAll();
 
-        for(Game g: games){
+        for (Game g : games) {
             OffsetDateTime startTime = g.getStartDateTime();
             OffsetDateTime endTime = g.getEndDateTime();
-            switch (g.getGameState()){
+            switch (g.getGameState()) {
                 case REGISTRATION -> {
-                    if(OffsetDateTime.now().isAfter(startTime))
+                    if (OffsetDateTime.now().isAfter(startTime))
                         gameService.setGameInfection(g);
                 }
                 case INFECTION -> {
-                    if(OffsetDateTime.now().isAfter(startTime.plusSeconds(infectionMinutes))){
+                    if (OffsetDateTime.now().isAfter(startTime.plusSeconds(infectionMinutes))) {
                         gameService.setGameStart(g);
                     }
                 }
                 case IN_PROGRESS -> {
-                    if(OffsetDateTime.now().isAfter(endTime))
+                    if (OffsetDateTime.now().isAfter(endTime))
                         gameService.setGameComplete(g);
                 }
             }

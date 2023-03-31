@@ -21,7 +21,9 @@ public abstract class SquadCheckinMapper {
     protected SquadService squadService;
     @Autowired
     protected SquadMemberService squadMemberService;
+
     public abstract List<SquadCheckinGetDto> toSquadCheckinDto(List<SquadCheckin> squadCheckin);
+
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
     @Mapping(target = "squad", source = "squadId", qualifiedByName = "squadIdToSquad")
     @Mapping(target = "squadMember", source = "player.id", qualifiedByName = "playerIdToSquadMember")
@@ -34,10 +36,12 @@ public abstract class SquadCheckinMapper {
     Game mapGameIdToGame(int gameId) {
         return gameService.findById(gameId);
     }
+
     @Named("squadIdToSquad")
     Squad mapSquadIdToSquad(int squadId) {
         return squadService.findById(squadId);
     }
+
     @Named("playerIdToSquadMember")
     SquadMember mapPlayerIdToSquadMember(int playerId) {
         return squadMemberService.findByPlayerId(playerId);

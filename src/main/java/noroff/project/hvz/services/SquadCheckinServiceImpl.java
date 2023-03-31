@@ -11,11 +11,12 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 
 @Service
-public class SquadCheckinServiceImpl implements SquadCheckinService{
+public class SquadCheckinServiceImpl implements SquadCheckinService {
     private final SquadCheckinRepository squadCheckinRepository;
     private final Logger logger = LoggerFactory.getLogger(SquadCheckinServiceImpl.class);
-    public SquadCheckinServiceImpl(SquadCheckinRepository squadCheckinRepository){
-        this.squadCheckinRepository=squadCheckinRepository;
+
+    public SquadCheckinServiceImpl(SquadCheckinRepository squadCheckinRepository) {
+        this.squadCheckinRepository = squadCheckinRepository;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class SquadCheckinServiceImpl implements SquadCheckinService{
         squadCheckin.setStartTime(now);
         squadCheckin.setEndTime(now.plusMinutes(30));
         SquadCheckin old = squadCheckinRepository.getBySquadMemberId(squadCheckin.getSquadMember().getId());
-        if(old!=null)
+        if (old != null)
             squadCheckin.setId(old.getId());
         return squadCheckinRepository.save(squadCheckin);
     }

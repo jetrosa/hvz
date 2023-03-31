@@ -18,15 +18,16 @@ import java.util.Collection;
 import java.util.Set;
 
 @Service
-public class SquadMemberServiceImpl implements  SquadMemberService{
+public class SquadMemberServiceImpl implements SquadMemberService {
     private final SquadService squadService;
     private final SquadMemberRepository squadMemberRepository;
     private final Logger logger = LoggerFactory.getLogger(SquadMemberServiceImpl.class);
 
-    public SquadMemberServiceImpl(SquadMemberRepository squadMemberRepository, SquadService squadService){
-        this.squadMemberRepository=squadMemberRepository;
-        this.squadService=squadService;
+    public SquadMemberServiceImpl(SquadMemberRepository squadMemberRepository, SquadService squadService) {
+        this.squadMemberRepository = squadMemberRepository;
+        this.squadService = squadService;
     }
+
     @Override
     public SquadMember findById(Integer id) {
         return squadMemberRepository.findById(id)
@@ -64,7 +65,7 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         int squadId = squadMember.getSquad().getId();
         squadMemberRepository.delete(squadMember);
         Set<SquadMember> remainingSquadMembers = squadMemberRepository.findAllBySquadId(squadId);
-        if(remainingSquadMembers.isEmpty()){
+        if (remainingSquadMembers.isEmpty()) {
             squadService.deleteById(squadId);
         }
     }
@@ -74,7 +75,7 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
         SquadMemberWithPlayerNameDto dto = new SquadMemberWithPlayerNameDto();
         Player player = squadMember.getPlayer();
         AppUser user = player.getAppUser();
-        String fullName = user.getFirstName()+" "+user.getLastName();
+        String fullName = user.getFirstName() + " " + user.getLastName();
 
         dto.setRank(dto.getRank());
         dto.setFullName(fullName);
@@ -83,11 +84,11 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
 
     @Override
     public void joinSquad(int squadId, Player player) {
-        if(squadMemberRepository.existsByPlayerId(player.getId()))
+        if (squadMemberRepository.existsByPlayerId(player.getId()))
             throw new DuplicateKeyException("player_id");
 
         Squad squad = squadService.findById(squadId);
-        if(player.getIsHuman()!=squad.getIsHuman()){
+        if (player.getIsHuman() != squad.getIsHuman()) {
             throw new FactionMismatchException(player.getIsHuman(), "squad");
         }
         SquadMember s = new SquadMember();
@@ -100,9 +101,9 @@ public class SquadMemberServiceImpl implements  SquadMemberService{
     @Override
     public void leaveSquad(int playerId) {
         SquadMember s = squadMemberRepository.findByPlayerId(playerId);
-        if(s==null){
+        if (s == null) {
             throw new RecordNotFoundException("squad member", playerId);
-        }else
+        } else
             delete(s);
     }
 

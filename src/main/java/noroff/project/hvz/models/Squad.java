@@ -29,15 +29,15 @@ public class Squad {
     @ManyToOne
     private Game game;
     @JsonIgnore
-    @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SquadMember> squadMembers;
     @JsonIgnore
-    @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SquadCheckin> squadCheckins;
     @JsonIgnore
-    @OneToMany(mappedBy = "squad", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ChatMessage> chatMessages;
 }

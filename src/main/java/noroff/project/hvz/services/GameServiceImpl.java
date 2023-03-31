@@ -17,17 +17,19 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class GameServiceImpl implements GameService{
+public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
     private final MapCoordinateRepository mapCoordinateRepository;
 
     private final Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
-    public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository, MapCoordinateRepository mapCoordinateRepository){
-        this.gameRepository=gameRepository;
-        this.mapCoordinateRepository=mapCoordinateRepository;
+
+    public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository, MapCoordinateRepository mapCoordinateRepository) {
+        this.gameRepository = gameRepository;
+        this.mapCoordinateRepository = mapCoordinateRepository;
         this.playerRepository = playerRepository;
     }
+
     @Override
     public Game findById(Integer id) {
         return gameRepository.findById(id)
@@ -66,9 +68,9 @@ public class GameServiceImpl implements GameService{
     @Transactional
     @Override
     public Game createGameWithMap(Game game, List<MapCoordinateDto> mapCoordinateDtos) {
-        Game newGame=add(game);
+        Game newGame = add(game);
         List<MapCoordinate> mapCoordinates = new ArrayList<>();
-        for(MapCoordinateDto dto: mapCoordinateDtos){
+        for (MapCoordinateDto dto : mapCoordinateDtos) {
             MapCoordinate m = new MapCoordinate();
             m.setLatitude(dto.getLatitude());
             m.setLongitude(dto.getLongitude());
@@ -78,23 +80,24 @@ public class GameServiceImpl implements GameService{
         mapCoordinateRepository.saveAll(mapCoordinates);
         return newGame;
     }
+
     @Transactional
     @Override
     public void setGameInfection(Game game) {
-       List<Player> players = playerRepository.findAllByGameId(game.getId());
-       if(players.size()>0) {
-           Random rnd = new Random();
-           int infectedPlayerNum = rnd.nextInt(players.size());
-           players.get(infectedPlayerNum).setIsPatientZero(true);
-       }
-       game.setGameState(GameState.INFECTION);
+        List<Player> players = playerRepository.findAllByGameId(game.getId());
+        if (players.size() > 0) {
+            Random rnd = new Random();
+            int infectedPlayerNum = rnd.nextInt(players.size());
+            players.get(infectedPlayerNum).setIsPatientZero(true);
+        }
+        game.setGameState(GameState.INFECTION);
     }
 
     @Transactional
     @Override
     public void setGameStart(Game game) {
         List<Player> players = playerRepository.findAllByGameIdAndIsPatientZeroIsTrue(game.getId());
-        for(Player p: players){
+        for (Player p : players) {
             p.setIsHuman(false);
         }
         game.setGameState(GameState.IN_PROGRESS);

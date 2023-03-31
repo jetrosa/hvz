@@ -22,8 +22,8 @@ public class ChatMessage {
     @NotBlank(message = "Message may not be blank")
     @Size(min = 1, max = 300, message = "Message must be between 1 and 300 characters long")
     private String message;
-    private Boolean isHumanGlobal=false;
-    private Boolean isZombieGlobal=false;
+    private Boolean isHumanGlobal = false;
+    private Boolean isZombieGlobal = false;
     @CreationTimestamp
     @Column(name = "chat_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

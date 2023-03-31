@@ -11,14 +11,14 @@ public class RandomIdGenerator {
 
     /**
      * Generate random string including numbers 0-9 and alphabet a-z
+     *
      * @param length Length of the generated String
      * @return Returns the generated String
      */
-    public static String GetBase36(int length)
-    {
+    public static String GetBase36(int length) {
         var sb = new StringBuilder(length);
 
-        for (int i=0; i<length; i++)
+        for (int i = 0; i < length; i++)
             sb.append(_baseChars[_random.nextInt(36)]);
 
         return sb.toString();

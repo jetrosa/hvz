@@ -11,12 +11,14 @@ import java.util.Collection;
 import java.util.Set;
 
 @Service
-public class MissionServiceImpl implements MissionService{
+public class MissionServiceImpl implements MissionService {
     private final MissionRepository missionRepository;
     private final Logger logger = LoggerFactory.getLogger(MissionServiceImpl.class);
-    public MissionServiceImpl(MissionRepository missionRepository){
-        this.missionRepository=missionRepository;
+
+    public MissionServiceImpl(MissionRepository missionRepository) {
+        this.missionRepository = missionRepository;
     }
+
     @Override
     public Mission findById(Integer id) {
         return missionRepository.findById(id)

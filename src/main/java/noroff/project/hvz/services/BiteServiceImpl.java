@@ -23,12 +23,13 @@ public class BiteServiceImpl implements BiteService {
     private final PlayerService playerService;
     private final ChatMessageService chatMessageService;
 
-    public BiteServiceImpl(BiteRepository biteRepository, SquadMemberService squadMemberService, PlayerService playerService, ChatMessageService chatMessageService){
+    public BiteServiceImpl(BiteRepository biteRepository, SquadMemberService squadMemberService, PlayerService playerService, ChatMessageService chatMessageService) {
         this.biteRepository = biteRepository;
         this.squadMemberService = squadMemberService;
         this.playerService = playerService;
         this.chatMessageService = chatMessageService;
     }
+
     @Override
     public Bite findById(Integer id) {
         return biteRepository.findById(id)
@@ -48,16 +49,16 @@ public class BiteServiceImpl implements BiteService {
     @Override
     public Bite add(Bite bite) {
         boolean isVictimAlreadyBitten = biteRepository.existsByVictimId(bite.getVictim().getId());
-        if(!isVictimAlreadyBitten){
+        if (!isVictimAlreadyBitten) {
             Player player = bite.getVictim();
             SquadMember s = squadMemberService.findByPlayerId(player.getId());
-            if(s!=null) {
+            if (s != null) {
                 ChatMessage bittenSquadChat = new ChatMessage();
                 bittenSquadChat.setGame(player.getGame());
                 bittenSquadChat.setPlayer(player);
                 bittenSquadChat.setMessage("**turned into a zombie**");
-                chatMessageService.addSquadChat(bittenSquadChat,s.getSquad().getId());
-                ChatMessage bittenFactionChat=new ChatMessage();
+                chatMessageService.addSquadChat(bittenSquadChat, s.getSquad().getId());
+                ChatMessage bittenFactionChat = new ChatMessage();
                 bittenFactionChat.setGame(player.getGame());
                 bittenFactionChat.setPlayer(player);
                 bittenFactionChat.setMessage("**turned into a zombie**");
@@ -69,8 +70,7 @@ public class BiteServiceImpl implements BiteService {
             bite.getVictim().setIsHuman(false);
             playerService.update(player);
             return biteRepository.save(bite);
-        }
-        else
+        } else
             throw new DuplicateKeyException("victim");
     }
 

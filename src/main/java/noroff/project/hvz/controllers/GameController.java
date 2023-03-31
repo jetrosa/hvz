@@ -33,25 +33,25 @@ public class GameController {
         this.gameService = gameService;
         this.chatMessageService = chatMessageService;
         this.playerService = playerService;
-        this.gameMapper=gameMapper;
+        this.gameMapper = gameMapper;
         this.chatMessageMapper = chatMessageMapper;
     }
 
-    @Operation(summary = "Returns a list of games.")
+    @Operation(summary = "Return a list of games")
     @GetMapping // GET: localhost:8080/api/v1/game
     public ResponseEntity<Collection<GameGetDto>> getAll() {
         List<GameGetDto> games = gameMapper.toGameDto(gameService.findAll());
         return ResponseEntity.ok(games);
     }
 
-    @Operation(summary = "Returns a specific game object.")
+    @Operation(summary = "Return a specific game object")
     @GetMapping("{gameId}") // GET: localhost:8080/api/v1/game
     public ResponseEntity<GameGetDto> getById(@PathVariable int gameId) {
         GameGetDto game = gameMapper.toGameDto(gameService.findById(gameId));
         return ResponseEntity.ok(game);
     }
 
-    @Operation(summary = "Creates a new game. Admin only.")
+    @Operation(summary = "Create a new game. Admin only")
     @PostMapping // POST: localhost:8080/api/v1/game
     public ResponseEntity<?> add(@RequestBody GameAndCoordinatesDto g) {
         Game createdGame = gameService.createGameWithMap(gameMapper.toGame(g.getGameDto()), g.getMapCoordinateDtos());
@@ -64,7 +64,7 @@ public class GameController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Updates a game. Admin only.")
+    @Operation(summary = "Update a game. Admin only")
     @PutMapping("{gameId}") // PUT: localhost:8080/api/v1/game/<game_id>
     public ResponseEntity<?> update(@RequestBody GamePostDto game, @PathVariable int gameId) {
         Game g = gameService.findById(gameId);
@@ -76,7 +76,7 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Deletes (cascading) a game. Admin only.")
+    @Operation(summary = "Delete (cascading) a game. Admin only")
     @DeleteMapping("{gameId}") // DELETE: localhost:8080/api/v1/game/<game_id>
     public ResponseEntity<?> delete(@PathVariable int gameId) {
         gameService.deleteById(gameId);
@@ -84,7 +84,7 @@ public class GameController {
     }
 
 
-    @Operation(summary = "Returns a list of faction-specific chat messages.")
+    @Operation(summary = "Return a list of faction-specific chat messages")
     @GetMapping("{gameId}/chat") // GET: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<List<ChatMessageGetDto>> getChatById(Principal principal, @PathVariable int gameId) {
         Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
@@ -92,7 +92,7 @@ public class GameController {
         return ResponseEntity.ok(chatMessages);
     }
 
-    @Operation(summary = "Creates a new chat message.")
+    @Operation(summary = "Create a new chat message")
     @PostMapping("{gameId}/chat") // POST: localhost:8080/api/v1/game/<game_id>/chat
     public ResponseEntity<?> add(Principal principal, @PathVariable int gameId, @RequestBody ChatMessagePostDto chatMessage) {
         Player player = playerService.findByGameIdAndAppUserUuid(gameId, principal.getName());
@@ -105,20 +105,4 @@ public class GameController {
 
         return ResponseEntity.created(location).build();
     }
-
-
-
-    /*
-
-
-GET /game/<game_id>/chat
-Returns a list of chat messages. Optionally accepts appropriate query parameters.
-The messages returned should take into account the current game state of the player,
-i.e. a human should recieve chat messages addressed to the ”global” (cross-faction chat)
-and ”human” chats but not the ”zombie” chat.
-POST /game/<game_id>/chat
-Send a new chat message. Accepts appropriate parameters in the request body as
-application/json
-     */
-
 }
