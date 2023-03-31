@@ -81,6 +81,13 @@ public class GameServiceImpl implements GameService {
         return newGame;
     }
 
+    /**
+     * Turn one of the players in the game to patient zero that will be turned into a zombie after a while.
+     * <p>
+     * Set the game state to INFECTION.
+     *
+     * @param game target game
+     */
     @Transactional
     @Override
     public void setGameInfection(Game game) {
@@ -93,6 +100,13 @@ public class GameServiceImpl implements GameService {
         game.setGameState(GameState.INFECTION);
     }
 
+    /**
+     * Find the patient zero players and turn them into zombies.
+     * <p>
+     * Set the game state to IN_PROGRESS.
+     *
+     * @param game target game
+     */
     @Transactional
     @Override
     public void setGameStart(Game game) {
@@ -103,6 +117,11 @@ public class GameServiceImpl implements GameService {
         game.setGameState(GameState.IN_PROGRESS);
     }
 
+    /**
+     * Set the game state to COMPLETE.
+     *
+     * @param game target game
+     */
     @Override
     public void setGameComplete(Game game) {
         game.setGameState(GameState.COMPLETE);
