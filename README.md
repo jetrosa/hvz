@@ -25,7 +25,9 @@ Dev environment requires creating a file that includes env variables (env.proper
 Example (replace the values):\
 DB_URL = jdbc:postgresql://localhost:5432/hvz-db\
 DB_USERNAME = postgres\
-DB_PASSWORD = postgres
+DB_PASSWORD = postgres\
+JWT_ISSUER_URI = https://lemur-3.cloud-iam.com/auth/realms/humansvszombies  
+JWT_VERIFY_URI = https://lemur-3.cloud-iam.com/auth/realms/humansvszombies/protocol/openid-connect/certs  
 
 ---
 ### Docker examples:
@@ -43,7 +45,9 @@ PROD_DB_HOST=\
 PROD_DB_PORT=\
 PROD_DB_NAME=\
 PROD_DB_USERNAME=\
-PROD_DB_PASSWORD=
+PROD_DB_PASSWORD=\
+JWT_ISSUER_URI=\
+JWT_VERIFY_URI=
 - docker-compose -f docker-compose-prod.yml build up
 
 
