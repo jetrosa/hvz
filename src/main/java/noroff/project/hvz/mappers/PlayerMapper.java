@@ -17,5 +17,6 @@ public abstract class PlayerMapper {
     @Mapping(target = "gameId", source = "game.id")
     @Mapping(target = "playerId", source = "id")
     public abstract PlayerGetDto toPlayerGetDto(Player player);
+
     public abstract List<PlayerGetDto> toPlayerGetDto(List<Player> player);
 }

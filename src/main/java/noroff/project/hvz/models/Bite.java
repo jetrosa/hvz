@@ -34,16 +34,17 @@ public class Bite {
     private Double longitude;
     @JsonIgnore
     @NotNull(message = "Game may not be null")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Game game;
 
     @NotNull(message = "Biter (zombie-player) may not be null")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Player biter;
     @JoinColumn(unique = true)
     @NotNull(message = "Victim (human-player)  may not be null")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Player victim;
 }

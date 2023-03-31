@@ -8,5 +8,5 @@ RUN ./gradlew clean build -x test
 
 FROM eclipse-temurin:17-alpine
 COPY --from=build build/libs/*.jar hvz-backend.jar
-VOLUME /tmp
+#VOLUME /tmp
 ENTRYPOINT ["java","-jar","hvz-backend.jar"]

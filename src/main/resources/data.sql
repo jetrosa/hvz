@@ -1,6 +1,6 @@
 INSERT INTO app_user (first_name, last_name, uuid)
 VALUES
-    ('Admin', 'Admin', '8129434e-08fc-4295-9b77-0fca1f622cb0'),--1
+    ('Liz', 'Lake', 'adkl'),--1
     ('Joe', 'Jackson', 'gggg'),--2
     ('Alice', 'Smith', '0d3968ed-4e7b-420d-a638-a5915ae9821c'),--3
     ('Max', 'Parker', 'fd89'),--4
@@ -10,7 +10,8 @@ VALUES
     ('Jesus', 'Gutierrez', 'fh99'),--8
     ('Tom', 'Teamless', 'fa99'),--9
     ('Lana', 'Loner', 'e8ba7c37-301c-45f2-a960-63136e1c6049'),--10
-    ('Lobby', 'Lob', 'ffff');--11
+    ('Lobby', 'Lob', 'ffff'),--11
+    ('Admin', 'Admin', '8129434e-08fc-4295-9b77-0fca1f622cb0');--12
 
 
 INSERT INTO game (game_name, description, game_state, start_date_time, end_date_time)

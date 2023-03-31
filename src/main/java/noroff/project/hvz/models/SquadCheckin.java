@@ -45,7 +45,7 @@ public class SquadCheckin {
     @JsonIgnore
     @JoinColumn(unique = true)
     @NotNull(message = "Squad member may not be null")
-    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SquadMember squadMember;
 }

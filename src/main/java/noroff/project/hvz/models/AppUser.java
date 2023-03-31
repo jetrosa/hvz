@@ -21,7 +21,6 @@ public class AppUser {
     @NotNull(message = "Last name may not be null")
     @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters long")
     private String lastName;
-
     @JsonIgnore
     @NotNull(message = "User id may not be null")
     @Size(max = 50)

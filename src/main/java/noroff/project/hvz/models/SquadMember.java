@@ -16,7 +16,7 @@ public class SquadMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull(message = "Rank may not be null")
-    @Range(min=0)
+    @Range(min = 0)
     private int rank = 0;
     @NotNull(message = "Squad may not be null")
     @ManyToOne
@@ -24,6 +24,6 @@ public class SquadMember {
     @NotNull(message = "Player may not be null")
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="player_id", unique=true)
+    @JoinColumn(name = "player_id", unique = true)
     private Player player;
 }

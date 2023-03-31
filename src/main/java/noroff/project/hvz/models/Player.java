@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "app_user_id", "game_id" }) })
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"app_user_id", "game_id"})})
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Player {
     private Boolean isPatientZero = false;
     @JsonIgnore
     @NotNull(message = "Personal bite code may not be null")
-    @Column(unique=true)
+    @Column(unique = true)
     private String biteCode;
     @NotNull(message = "User may not be null")
     @ManyToOne
@@ -36,7 +36,7 @@ public class Player {
     private Game game;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "player", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ChatMessage> chatMessages;
 }

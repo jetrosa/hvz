@@ -16,8 +16,11 @@ import java.util.Set;
 public abstract class MissionMapper {
     @Autowired
     protected GameService gameService;
+
     public abstract MissionGetDto toMissionDto(Mission mission);
+
     public abstract Set<MissionGetDto> toMissionDto(Set<Mission> mission);
+
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
     @Mapping(target = "id", ignore = true)
     public abstract Mission toMission(MissionPostDto missionPostDto, int gameId);
