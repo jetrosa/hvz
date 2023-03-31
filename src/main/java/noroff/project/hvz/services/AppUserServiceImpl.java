@@ -15,7 +15,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final AppUserRepository appUserRepository;
     private final Logger logger = LoggerFactory.getLogger(AppUserServiceImpl.class);
 
-    public AppUserServiceImpl(AppUserRepository appUserRepository){
+    public AppUserServiceImpl(AppUserRepository appUserRepository) {
         this.appUserRepository = appUserRepository;
     }
 

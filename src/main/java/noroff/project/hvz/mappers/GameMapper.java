@@ -14,9 +14,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class GameMapper {
-    @Mapping(target="playerCount", source="players", qualifiedByName = "playersToPlayerCount")
+    @Mapping(target = "playerCount", source = "players", qualifiedByName = "playersToPlayerCount")
     public abstract GameGetDto toGameDto(Game game);
+
     public abstract List<GameGetDto> toGameDto(Collection<Game> games);
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "gameState", ignore = true)
     @Mapping(target = "mapCoordinates", ignore = true)

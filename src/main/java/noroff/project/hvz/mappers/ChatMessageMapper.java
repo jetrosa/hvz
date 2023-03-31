@@ -25,15 +25,15 @@ public abstract class ChatMessageMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "chat_time", ignore = true)
     @Mapping(target = "squad", ignore = true)
-    public abstract ChatMessage toChatMessage(ChatMessagePostDto chatMessagePostDto,  int gameId, Player player);
+    public abstract ChatMessage toChatMessage(ChatMessagePostDto chatMessagePostDto, int gameId, Player player);
 
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
     @Mapping(target = "player", source = "player")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "chat_time", ignore = true)
     @Mapping(target = "squad", ignore = true)
-    @Mapping(target = "isHumanGlobal", constant="false")
-    @Mapping(target = "isZombieGlobal", constant="false")
+    @Mapping(target = "isHumanGlobal", constant = "false")
+    @Mapping(target = "isZombieGlobal", constant = "false")
     public abstract ChatMessage toSquadChatMessage(ChatMessageSquadPostDto chatMessagePostDto, int gameId, Player player);
 
     @Named("gameIdToGame")

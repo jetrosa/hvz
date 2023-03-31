@@ -13,7 +13,8 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class PreSecurityFilter implements Filter {
     private final LoginAttemptService loginAttemptService;
-    public PreSecurityFilter(LoginAttemptService loginAttemptService){
+
+    public PreSecurityFilter(LoginAttemptService loginAttemptService) {
         this.loginAttemptService = loginAttemptService;
     }
 

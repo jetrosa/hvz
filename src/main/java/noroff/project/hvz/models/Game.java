@@ -39,33 +39,33 @@ public class Game {
     @Column(name = "end_date_time", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private OffsetDateTime endDateTime;
-    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MapCoordinate> mapCoordinates;
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ChatMessage> chatMessages;
     @JsonIgnore
-    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Bite> bites;
-    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Player> players;
     @JsonIgnore
-    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Squad> squads;
     @JsonIgnore
-    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<SquadCheckin> squadCheckins;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "game", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Mission> missions;
 }

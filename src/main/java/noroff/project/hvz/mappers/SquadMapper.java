@@ -23,9 +23,12 @@ public abstract class SquadMapper {
     protected GameService gameService;
     @Autowired
     protected PlayerService playerService;
+
     public abstract Set<SquadGetDto> toSquadDto(Set<Squad> squads);
+
     @Mapping(target = "squadMembers", source = "squadMembers", qualifiedByName = "squadMemberInfo")
     public abstract SquadGetDto toSquadDto(Squad squad);
+
     @Mapping(target = "game", source = "gameId", qualifiedByName = "gameIdToGame")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isHuman", ignore = true)

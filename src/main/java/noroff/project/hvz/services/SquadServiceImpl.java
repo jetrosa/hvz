@@ -11,13 +11,14 @@ import java.util.Collection;
 import java.util.Set;
 
 @Service
-public class SquadServiceImpl implements SquadService{
+public class SquadServiceImpl implements SquadService {
     private final SquadRepository squadRepository;
     private final Logger logger = LoggerFactory.getLogger(SquadServiceImpl.class);
 
-    public SquadServiceImpl(SquadRepository squadRepository){
-        this.squadRepository=squadRepository;
+    public SquadServiceImpl(SquadRepository squadRepository) {
+        this.squadRepository = squadRepository;
     }
+
     @Override
     public Squad findById(Integer id) {
         return squadRepository.findById(id)
