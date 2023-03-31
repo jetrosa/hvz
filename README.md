@@ -5,7 +5,7 @@
 
 
   Technologies: Spring Boot, Spring Security, Hibernate, Keycloak\
-  Database: Postgres\
+  Database: PostgreSQL\
   Build tool: Gradle
 ---
 Human versus Zombies backend includes API server for the game and scheduled functions for game startup. 
@@ -17,6 +17,7 @@ one player will be assigned a patient zero status
 
 Failed authentication attempts are monitored (based on IP) and the IP is blocked for a while after too many tries.\
 (rate limit configuration in ./config AuthenticationFailureListener, PreSecurityFilter)
+
 ---
 Development profile: default (env not set)\
 Production profile: prod
