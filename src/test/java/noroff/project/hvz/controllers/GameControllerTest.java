@@ -1,37 +1,24 @@
 package noroff.project.hvz.controllers;
 
-import noroff.project.hvz.config.LoginAttemptService;
-import noroff.project.hvz.config.PreSecurityFilter;
-import noroff.project.hvz.mappers.GameMapper;
-import noroff.project.hvz.services.ChatMessageService;
-import noroff.project.hvz.services.GameService;
-import noroff.project.hvz.services.PlayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(GameController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 class GameControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private PreSecurityFilter preSecurityFilter;
-    @MockBean
-    private GameService gameService;
-    @MockBean
-    private GameMapper gameMapper;
-    @MockBean
-    private ChatMessageService chatMessageService;
-    @MockBean
-    private PlayerService playerService;
 
     @BeforeEach
     void setUp() {
@@ -42,9 +29,10 @@ class GameControllerTest {
     }
 
     @Test
-    void shouldCreateNewGame() throws Exception {
+    @WithMockUser(username = "admin", roles = { "hvz_admin" })
+    void add_shouldCreateNewGame() throws Exception {
         this.mockMvc
-                .perform(post("/api/v2/game")
+                .perform(post("/api/v1/game")
                         .contentType(APPLICATION_JSON)
                         .content("""
            {
